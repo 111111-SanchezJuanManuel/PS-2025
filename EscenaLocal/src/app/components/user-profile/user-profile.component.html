@@ -1,0 +1,143 @@
+<div class="container mt-4" style="max-width: 540px">
+  <!-- loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div
+      class="spinner-border text-primary"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="visually-hidden">Cargando perfil...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando perfil...</p>
+  </div>
+
+  <!-- error -->
+  <div *ngIf="!loading && error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- perfil -->
+  <div *ngIf="!loading && usuario" class="card shadow-sm p-3">
+    <div class="d-flex align-items-center mb-3 gap-3">
+      <div *ngIf="imagenUrl; else sinImagen">
+        <img
+          [src]="imagenUrl"
+          alt="Foto de perfil"
+          class="rounded-circle border"
+          style="width: 90px; height: 90px; object-fit: cover"
+        />
+      </div>
+      <ng-template #sinImagen>
+        <div
+          class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white"
+          style="width: 90px; height: 90px"
+        >
+          <span style="font-size: 1.5rem">
+            {{ usuario.username ? (usuario.username[0] | uppercase) : 'U' }}
+          </span>
+        </div>
+      </ng-template>
+
+      <div>
+        <h4 class="mb-0">{{ usuario.username }}</h4>
+        <small class="text-muted">{{ usuario.email }}</small>
+        <div class="mt-1 d-flex flex-wrap gap-1">
+          <span class="badge bg-info-subtle text-dark">
+            {{ usuario.rol }}
+          </span>
+
+          <!-- 🔹 IDs segun rol -->
+          <span *ngIf="esArtista()" class="badge bg-secondary">
+            Artista ID: {{ idArtista || '-' }}
+          </span>
+
+          <span *ngIf="esProductor()" class="badge bg-secondary">
+            Productor ID: {{ idProductor || '-' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- datos comunes -->
+    <div class="mb-2">
+      <strong>Usuario:</strong> {{ usuario.username }}
+    </div>
+    <div class="mb-2">
+      <strong>Email:</strong> {{ usuario.email }}
+    </div>
+
+    <!-- datos extendidos -->
+    <div *ngIf="esArtista() || esProductor()" class="mt-3">
+      <h6 class="text-uppercase text-muted">
+        Datos del {{ esArtista() ? 'artista' : 'productor' }}
+      </h6>
+      <div class="mb-2">
+        <strong>Nombre:</strong> {{ usuario.nombre || '-' }}
+      </div>
+      <div class="mb-2">
+        <strong>Representante:</strong> {{ usuario.representante || '-' }}
+      </div>
+      <div class="mb-2">
+        <strong>Teléfono representante:</strong>
+        {{ usuario.telefono_representante || '-' }}
+      </div>
+      <div class="mb-2">
+        <strong>Red social:</strong> {{ usuario.red_social || '-' }}
+      </div>
+
+      <div class="mb-2" *ngIf="esArtista()">
+        <strong>Género musical:</strong> {{ usuario.generoNombre || '-' }}
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- 🔹 Botones de acción -->
+     <button
+  type="button"
+  class="btn btn-outline-secondary"
+  (click)="configurarNotificaciones()">
+  <i class="bi bi-bell"></i> Configurar notificaciones
+</button>
+    <div class="d-flex justify-content-end flex-wrap gap-2 mt-3">
+      <!-- Botón Ver eventos (para todos los usuarios) -->
+      <button *ngIf="esProductor() || esArtista()"class="btn btn-outline-secondary" (click)="verEventos()">
+        <i class="bi bi-calendar-event"></i> Ver eventos
+      </button>
+
+      <!-- Botón Editar perfil -->
+      <button class="btn btn-outline-primary" (click)="editarPerfil()">
+        <i class="bi bi-pencil-square"></i> Editar perfil
+      </button>
+
+      <button
+        class="btn btn-outline-primary"
+        [routerLink]="['/change-password']"
+      >
+        <i class="bi bi-pencil-square"></i>Cambiar contraseña
+      </button>
+
+      <!-- Botón Crear evento (solo productor) -->
+      <button
+        *ngIf="esProductor()"
+        class="btn btn-success"
+        (click)="crearEvento(usuario.idProductor)"
+      >
+        <i class="bi bi-plus-circle"></i> Crear evento
+      </button>
+
+      <button
+        *ngIf="esProductor() || esArtista()"
+        class="btn btn-success"
+        (click)="verReportes()"
+      >
+        <i class="bi bi-calendar-event"></i> Ver Reportes
+      </button>
+      <button *ngIf="esUsuario()" class="btn btn-outline-primary" (click)="verEntradas()">
+  Mis entradas
+</button>
+    </div>
+  </div>
+</div>
