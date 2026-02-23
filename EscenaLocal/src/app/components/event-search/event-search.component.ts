@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EventService, GeneroMusical } from '../../services/event.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -11,21 +11,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './event-search.component.css'
 })
 export class EventSearchComponent implements OnInit {
-  // búsqueda por texto
   searchControl = new FormControl('');
 
-  // filtro por provincia
   provinciaControl = new FormControl('');
   provincias: any[] = [];
 
-  // 🎧 filtro por género musical
   generoControl = new FormControl('');
-  generos: GeneroMusical[] = []; // se cargan desde el backend
+  generos: GeneroMusical[] = []; 
 
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
-    // Búsqueda con debounce
     this.searchControl.valueChanges
       .pipe(
         debounceTime(300),
@@ -33,11 +29,9 @@ export class EventSearchComponent implements OnInit {
       )
       .subscribe(() => this.notificar());
 
-    // Provincia sin debounce
     this.provinciaControl.valueChanges
       .subscribe(() => this.notificar());
 
-    // Género sin debounce
     this.generoControl.valueChanges
       .subscribe(() => this.notificar());
 
@@ -65,7 +59,6 @@ export class EventSearchComponent implements OnInit {
     });
   }
 
-  // 🔥 NUEVO: carga de géneros desde el backend
   cargarGeneros(): void {
     this.eventService.getGenerosMusicales().subscribe({
       next: (data) => {
@@ -77,3 +70,4 @@ export class EventSearchComponent implements OnInit {
     });
   }
 }
+

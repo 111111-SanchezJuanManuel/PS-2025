@@ -1,4 +1,4 @@
-package org.example.escenalocal.services.impl;
+﻿package org.example.escenalocal.services.impl;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.EntityNotFoundException;
@@ -189,7 +189,6 @@ public class EventoServiceImpl implements EventoService {
     }
     evento.setActivo(Boolean.TRUE.equals(dto.getActivo()));
 
-    // ---------- Relaciones obligatorias ----------
     var est = establecimientoRepository.findById(dto.getEstablecimientoId())
       .orElseThrow(() -> new EntityNotFoundException("Establecimiento no encontrado: " + dto.getEstablecimientoId()));
 
@@ -205,7 +204,6 @@ public class EventoServiceImpl implements EventoService {
       evento.setProductor(prod);
     }
 
-    // ---------- Imagen opcional ----------
     if (file != null && !file.isEmpty()) {
       String ct = file.getContentType() != null ? file.getContentType() : "application/octet-stream";
       if (!ct.startsWith("image/")) {
@@ -225,7 +223,6 @@ public class EventoServiceImpl implements EventoService {
       }
     }
 
-    // ---------- Artistas ----------
     if (dto.getArtistaId() != null && !dto.getArtistaId().isEmpty()) {
       var artistas = new HashSet<>(artistaRepository.findAllById(dto.getArtistaId()));
       var okA = artistas.stream().map(ArtistaEntity::getId).collect(Collectors.toSet());
@@ -244,7 +241,6 @@ public class EventoServiceImpl implements EventoService {
       }
     }
 
-    // ---------- Tipos de entrada + precio/disponibilidad ----------
     if (dto.getEntradasDetalle() != null && !dto.getEntradasDetalle().isEmpty()) {
 
       var idsTipos = dto.getEntradasDetalle().stream()
@@ -268,7 +264,7 @@ public class EventoServiceImpl implements EventoService {
         join.setId(new EventoTiposEntradaId(null, tipo.getId()));
 
         join.setPrecio(det.getPrecio());
-        join.setDisponibilidad(det.getDisponibilidad()); // número entero
+        join.setDisponibilidad(det.getDisponibilidad()); 
 
         evento.getEventoTiposEntrada().add(join);
         tipo.getEventoTipos().add(join);
@@ -277,18 +273,15 @@ public class EventoServiceImpl implements EventoService {
 
     var saved = eventoRepository.save(evento);
 
-    String nombreEvento = saved.getEvento(); // o getNombre()
+    String nombreEvento = saved.getEvento(); 
 
-    // 1) productor: resolver userId dueño del productor
     Long productorUserId = evento.getProductor().getUsuario().getId();
     notificacionService.createEventoCreadoNotificacion(productorUserId, nombreEvento);
 
-    // 2) artistas: a cada artista (usuario dueño del artista)
     List<ArtistaEventoEntity> artistas = evento.getArtistasEvento().stream().toList();
     for (ArtistaEventoEntity a : artistas) {
       Long artistaUserId = a.getArtista().getUsuario().getId();
 
-      // (opcional) evitar duplicado si justo coincide con productorUserId
       if (!artistaUserId.equals(productorUserId)) {
         notificacionService.createArtistaIncluidoEnEventoNotificacion(artistaUserId, nombreEvento);
       }
@@ -301,11 +294,9 @@ public class EventoServiceImpl implements EventoService {
   @Override
   @Transactional
   public GetEventoDto updateEvento(Long id, PutEventoDto dto) {
-    // 1) Traer evento con sus colecciones (lazy ok dentro de @Transactional)
     var ev = eventoRepository.findById(id)
       .orElseThrow(() -> new EntityNotFoundException("Evento no encontrado: " + id));
 
-    // 2) Campos simples (solo si el dto trae valor)
     if (dto.getEvento() != null) {
       ev.setEvento(dto.getEvento());
     }
@@ -316,7 +307,6 @@ public class EventoServiceImpl implements EventoService {
       ev.setActivo(Boolean.TRUE.equals(dto.getActivo()));
     }
 
-    // fecha: null -> no tocar; "" -> limpiar; "yyyy-MM-dd" -> setear
     if (dto.getFecha() != null) {
       if (dto.getFecha().isBlank()) {
         ev.setFecha(null);
@@ -325,7 +315,6 @@ public class EventoServiceImpl implements EventoService {
       }
     }
 
-    // hora: null -> no tocar; "" -> limpiar; "HH:mm[:ss]" -> setear
     if (dto.getHora() != null) {
       if (dto.getHora().isBlank()) {
         ev.setHora(null);
@@ -334,7 +323,6 @@ public class EventoServiceImpl implements EventoService {
       }
     }
 
-    // 3) Relaciones "single-valued" si vienen en el DTO
     if (dto.getEstablecimientoId() != null) {
       var est = establecimientoRepository.findById(dto.getEstablecimientoId())
         .orElseThrow(() -> new EntityNotFoundException("Establecimiento no encontrado: " + dto.getEstablecimientoId()));
@@ -353,7 +341,6 @@ public class EventoServiceImpl implements EventoService {
       ev.setProductor(prod);
     }
 
-    // 4) Relaciones "collection-valued" (reconciliar si vienen en el DTO)
     if (dto.getArtistaId() != null) {
       reconciliarArtistas(ev, new HashSet<>(dto.getArtistaId()));
     }
@@ -362,34 +349,26 @@ public class EventoServiceImpl implements EventoService {
       reconciliarEntradas(ev, new HashSet<>(dto.getEntradasDetalle()));
     }
 
-    // 5) Persistir y devolver DTO consistente
     var saved = eventoRepository.save(ev);
-    return toDto(saved); // usa tu método que arma GetEventoDto completo
+    return toDto(saved); 
   }
 
-  /**
-   * Reemplaza los artistas del evento por exactamente los que se pasen en artistaIds.
-   * Elimina los que sobran y crea los que faltan.
-   */
+  
   private void reconciliarArtistas(EventoEntity ev, Set<Long> artistaIds) {
-    // IDs actuales en el evento
     var actuales = ev.getArtistasEvento().stream()
       .map(ae -> ae.getArtista().getId())
       .collect(Collectors.toSet());
 
-    // --- Eliminar los que ya no vienen ---
     var iterator = ev.getArtistasEvento().iterator();
     while (iterator.hasNext()) {
       var join = iterator.next();
       Long aid = join.getArtista().getId();
       if (!artistaIds.contains(aid)) {
-        // quitar de ambos lados
         join.getArtista().getArtistaEventos().remove(join);
         iterator.remove();
       }
     }
 
-    // --- Agregar los nuevos que faltan ---
     var nuevosIds = artistaIds.stream()
       .filter(id -> !actuales.contains(id))
       .collect(Collectors.toSet());
@@ -406,24 +385,19 @@ public class EventoServiceImpl implements EventoService {
         var join = new ArtistaEventoEntity();
         join.setEvento(ev);
         join.setArtista(artista);
-        join.setId(new ArtistaEventoId(ev.getId(), artista.getId())); // si ev.getId() es null, JPA lo completará al persistir
+        join.setId(new ArtistaEventoId(ev.getId(), artista.getId())); 
         ev.getArtistasEvento().add(join);
         artista.getArtistaEventos().add(join);
       }
     }
   }
 
-  /**
-   * Reemplaza los tipos de entrada del evento por exactamente los que lleguen en 'detalles'.
-   * Hace upsert de precio/disponibilidad y elimina los tipos que ya no estén.
-   */
+  
   private void reconciliarEntradas(EventoEntity ev, Set<PostEntradaDetalleDto> detalles) {
-    // Map de tipoId -> detalle entrante
     Map<Long, PostEntradaDetalleDto> entrantes = detalles.stream()
       .filter(d -> d.getTipo() != null)
       .collect(Collectors.toMap(PostEntradaDetalleDto::getTipo, d -> d, (a, b) -> b));
 
-    // Validar tipos existentes en DB
     var idsTipos = entrantes.keySet();
     var tiposExistentes = new HashMap<Long, TiposEntradaEntity>();
     tiposEntradaRepository.findAllById(idsTipos).forEach(t -> tiposExistentes.put(t.getId(), t));
@@ -433,36 +407,28 @@ public class EventoServiceImpl implements EventoService {
       throw new EntityNotFoundException("Tipos de entrada no encontrados: " + faltantes);
     }
 
-    // Map de tipoId -> join actual
     Map<Long, EventoTiposEntradaEntity> actuales = ev.getEventoTiposEntrada().stream()
       .collect(Collectors.toMap(eje -> eje.getTiposEntrada().getId(), eje -> eje));
 
-    // --- Eliminar los que ya no vienen ---
     var it = ev.getEventoTiposEntrada().iterator();
     while (it.hasNext()) {
       var join = it.next();
       Long tipoId = join.getTiposEntrada().getId();
       if (!entrantes.containsKey(tipoId)) {
-        // quitar de ambos lados
         join.getTiposEntrada().getEventoTipos().remove(join);
         it.remove();
-        // Si manejás repositorio para join y no hay orphanRemoval, podrías hacer:
-        // eventoTiposEntradaRepository.delete(join);
       }
     }
 
-    // --- Upsert de los que vienen ---
     for (var entry : entrantes.entrySet()) {
       Long tipoId = entry.getKey();
       var det = entry.getValue();
 
       if (actuales.containsKey(tipoId)) {
-        // update
         var join = actuales.get(tipoId);
         join.setPrecio(det.getPrecio());
         join.setDisponibilidad(det.getDisponibilidad());
       } else {
-        // insert
         var tipo = tiposExistentes.get(tipoId);
         var join = new EventoTiposEntradaEntity();
         join.setEvento(ev);
@@ -491,9 +457,8 @@ public class EventoServiceImpl implements EventoService {
     try {
       ev.setImagenNombre(file.getOriginalFilename() != null ? file.getOriginalFilename() : "archivo");
       ev.setImagenContentType(file.getContentType() != null ? file.getContentType() : "application/octet-stream");
-      ev.setImagenDatos(file.getBytes());                 // <-- byte[]
-      ev.setImagenTamano(file.getSize());                 // <-- opcional
-      // al estar dentro de una transacción, el save puede ser implícito
+      ev.setImagenDatos(file.getBytes());                 
+      ev.setImagenTamano(file.getSize());                 
       eventoRepository.save(ev);
     } catch (IOException e) {
       throw new RuntimeException("No se pudo leer el archivo: " + e.getMessage(), e);
@@ -546,3 +511,4 @@ public class EventoServiceImpl implements EventoService {
       .toList();
   }
 }
+

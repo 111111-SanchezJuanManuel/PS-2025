@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -17,8 +17,8 @@ export class ResetPasswordComponent implements OnInit {
   newPassword: string = '';
   confirmPassword: string = '';
 
-  loadingToken = true; // mientras leemos el token de la URL
-  submitting = false; // mientras enviamos al backend
+  loadingToken = true; 
+  submitting = false; 
   successMessage = '';
   errorMessage = '';
 
@@ -87,3 +87,4 @@ export class ResetPasswordComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 }
+

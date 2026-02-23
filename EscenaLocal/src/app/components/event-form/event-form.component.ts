@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventService } from '../../services/event.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { ActivatedRoute, Router } from '@angular/router'; // 👈 agregado
+import { ActivatedRoute, Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-event-form',
@@ -31,19 +31,18 @@ export class EventFormComponent {
   precioEntrada: number | null = null;
   disponibilidadEntrada: number | null = null;
 
-  // id de PRODUCTOR que vamos a enviar al back (viene desde el perfil)
   productorIdFijado: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private eventService: EventService,
     private router: Router,
-    private route: ActivatedRoute     // 👈 inyectamos ActivatedRoute
+    private route: ActivatedRoute     
   ) {
     this.eventForm = this.fb.group({
       nombreEvento: ['', [Validators.required, Validators.minLength(3)]],
       descripcion: ['', [Validators.required, Validators.minLength(10)]],
-      productorId: ['', Validators.required],          // este es el productorId REAL
+      productorId: ['', Validators.required],          
       establecimientoId: ['', Validators.required],
       clasificacionId: ['', Validators.required],
       fecha: ['', Validators.required],
@@ -54,7 +53,6 @@ export class EventFormComponent {
   }
 
   ngOnInit(): void {
-    // 👇 leemos productorId desde la URL (?productorId=5)
     this.route.queryParamMap.subscribe(params => {
       const prodIdParam = params.get('productorId');
       if (prodIdParam) {
@@ -67,7 +65,7 @@ export class EventFormComponent {
     });
 
     this.cargarArtistas();
-    this.cargarProductores();   // opcional, solo informativo
+    this.cargarProductores();   
     this.cargarTiposEntrada();
     this.cargarEstablecimientos();
     this.cargarClasificaciones();
@@ -250,7 +248,7 @@ export class EventFormComponent {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      const maxSize = 5 * 1024 * 1024; 
       if (file.size > maxSize) {
         Swal.fire({
           icon: 'warning',
@@ -388,7 +386,7 @@ export class EventFormComponent {
       evento: this.eventForm.get('nombreEvento')?.value,
       descripcion: this.eventForm.get('descripcion')?.value,
       artistaId: this.artistasSeleccionados,
-      productorId: this.eventForm.get('productorId')?.value,   // 👈 id de PRODUCTOR
+      productorId: this.eventForm.get('productorId')?.value,   
       entradasDetalle: entradasDetalle,
       establecimientoId: this.eventForm.get('establecimientoId')?.value,
       clasificacionId: this.eventForm.get('clasificacionId')?.value,
@@ -443,7 +441,7 @@ export class EventFormComponent {
 
     this.eventForm.reset({
       activo: true,
-      productorId: this.productorIdFijado   // dejamos fijo el productorId también al resetear
+      productorId: this.productorIdFijado   
     });
 
     this.selectedFile = null;
@@ -460,3 +458,4 @@ export class EventFormComponent {
     this.router.navigate(['/eventos']);
   }
 }
+

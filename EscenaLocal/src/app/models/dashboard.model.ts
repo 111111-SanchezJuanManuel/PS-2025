@@ -1,4 +1,4 @@
-export interface ProductorDashboardDto {
+﻿export interface ProductorDashboardDto {
   kpis: ProductorKpiDto;
   ventasPorDia: PuntoVentaDiaDto[];
   entradasPorTipo: EntradasPorTipoDto[];
@@ -17,7 +17,7 @@ export interface ProductorKpiDto {
 }
 
 export interface PuntoVentaDiaDto {
-  fecha: string;   // LocalDate -> string
+  fecha: string;   
   totalDia: number;
 }
 
@@ -56,3 +56,4 @@ export interface EventoRankingDto {
   recaudacion: number;
   entradasVendidas: number;
 }
+

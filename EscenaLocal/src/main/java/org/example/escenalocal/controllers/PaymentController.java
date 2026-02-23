@@ -1,4 +1,4 @@
-package org.example.escenalocal.controllers;
+﻿package org.example.escenalocal.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -92,7 +92,7 @@ public class PaymentController {
 
     var cmd = new CreatePrefCommand(
       "EVT-" + eventId,
-      usuarioId,        // ✅ YA NO ES NULL
+      usuarioId,        
       eventId,
       tipoEntradaId,
       List.of(
@@ -114,6 +114,7 @@ public class PaymentController {
     );
   }
 }
+
 
 
 

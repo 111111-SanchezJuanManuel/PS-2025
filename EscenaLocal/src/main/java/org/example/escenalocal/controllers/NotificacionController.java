@@ -1,4 +1,4 @@
-package org.example.escenalocal.controllers;
+﻿package org.example.escenalocal.controllers;
 
 import org.example.escenalocal.dtos.NotificacionBadgeDto;
 import org.example.escenalocal.dtos.NotificacionItemDto;
@@ -29,7 +29,6 @@ import java.util.List;
       notificacionService.marcarComoLeido(id);
     }
 
-    //--//
     @GetMapping("/me/badge")
     public ResponseEntity<NotificacionBadgeDto> badge() {
       return ResponseEntity.ok(notificacionService.badge());
@@ -55,3 +54,4 @@ import java.util.List;
       return ResponseEntity.noContent().build();
     }
 }
+

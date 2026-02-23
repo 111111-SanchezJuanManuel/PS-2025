@@ -1,4 +1,4 @@
-package org.example.escenalocal.auth.security;
+﻿package org.example.escenalocal.auth.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -21,24 +21,13 @@ public class JwtUtil {
     return Keys.hmacShaKeyFor(secret.getBytes());
   }
 
-//  public String generateToken(String username) {
-//    Date now = new Date();
-//    Date expiry = new Date(now.getTime() + expirationMs);
-//    return Jwts.builder()
-//      .setSubject(username)
-//      .setIssuedAt(now)
-//      .setExpiration(expiry)
-//      .signWith(getKey(), SignatureAlgorithm.HS256)
-//      .compact();
-//  }
-
   public String generateToken(String username, String role) {
     Date now = new Date();
     Date expiry = new Date(now.getTime() + expirationMs);
 
     return Jwts.builder()
       .setSubject(username)
-      .claim("role", role) // 👈 acá agregás el rol directamente
+      .claim("role", role) 
       .setIssuedAt(now)
       .setExpiration(expiry)
       .signWith(getKey(), SignatureAlgorithm.HS256)
@@ -60,3 +49,4 @@ public class JwtUtil {
     }
   }
 }
+

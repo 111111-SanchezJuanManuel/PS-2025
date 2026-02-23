@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+﻿import { Component, AfterViewInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { PaymentService } from '../../services/payment.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,6 @@ import { loadMercadoPago } from '@mercadopago/sdk-js';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
   imports: [CommonModule, FormsModule],
-  // si es standalone, recordá agregar: standalone: true,
 })
 export class CheckoutComponent implements AfterViewInit {
   loading = false;
@@ -25,7 +24,6 @@ export class CheckoutComponent implements AfterViewInit {
   cantidad: number = 1;
   total: number = 0;
 
-  // guardamos la promesa del SDK para no cargarlo mil veces
   private mpPromise?: Promise<any>;
 
   constructor(
@@ -44,7 +42,6 @@ export class CheckoutComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // En tu versión del SDK, loadMercadoPago NO recibe argumentos
     console.log('[MP] Cargando SDK con loadMercadoPago()…');
     this.mpPromise = loadMercadoPago().catch(err => {
       console.error('[MP] Error cargando SDK:', err);
@@ -66,7 +63,6 @@ export class CheckoutComponent implements AfterViewInit {
         throw new Error('mpPublicKey no configurada en environment');
       }
 
-      // 1) Crear preferencia en tu backend
       console.log('[MP] Creando preferencia para evento', this.eventId);
       const res = await this.payments
         .createPreferenceForEvent(this.eventId, this.tipoEntradaId, this.cantidad, this.precio)
@@ -82,24 +78,20 @@ export class CheckoutComponent implements AfterViewInit {
         initPoint: this.initPoint,
       });
 
-      // 2) Esperar a que el SDK de MP esté cargado (script en window)
       console.log('[MP] Esperando a que cargue el SDK…');
       await (this.mpPromise ?? loadMercadoPago());
 
-      // 3) Verificar que window.MercadoPago exista
       const MPConstructor = (window as any).MercadoPago;
       if (!MPConstructor) {
         console.error('[MP] window.MercadoPago es undefined');
         throw new Error('SDK de Mercado Pago no inicializado en window');
       }
 
-      // 4) Crear instancia de MercadoPago usando la PUBLIC KEY
       console.log('[MP] Creando instancia de MercadoPago con publicKey:', environment.mpPublicKey);
       const mp = new MPConstructor(environment.mpPublicKey, {
         locale: 'es-AR',
       });
 
-      // 5) Verificar container del Wallet
       const containerId = 'wallet_container';
       const container = document.getElementById(containerId);
       if (!container) {
@@ -107,10 +99,8 @@ export class CheckoutComponent implements AfterViewInit {
         throw new Error('No se encontró el contenedor para el botón de pago');
       }
 
-      // limpiar contenedor por si hubo intentos previos
       container.innerHTML = '';
 
-      // 6) Construir el Wallet Brick
       const bricksBuilder = mp.bricks();
       console.log('[MP] Renderizando Wallet Brick en', containerId);
 
@@ -161,3 +151,4 @@ export class CheckoutComponent implements AfterViewInit {
     this.calcularTotal();
   }
 }
+

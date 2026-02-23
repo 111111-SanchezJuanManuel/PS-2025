@@ -1,4 +1,4 @@
-package org.example.escenalocal.auth.security;
+﻿package org.example.escenalocal.auth.security;
 
 import org.example.escenalocal.auth.service.CustomUserDetailsService;
 import org.springframework.context.annotation.*;
@@ -55,7 +55,6 @@ public class SecurityConfig {
           "/clasificaciones/**",
           "/entradas/**",
           "/productores/**",
-          //"/payments/create-preference/**",
           "/payments/webhook/**",
           "/api/notificaciones/**",
           "/ventas/**"
@@ -83,7 +82,7 @@ public class SecurityConfig {
     configuration.addAllowedOriginPattern("*");
     configuration.addAllowedMethod("*");
     configuration.addAllowedHeader("*");
-    configuration.setAllowCredentials(false); // más seguro con JWT
+    configuration.setAllowCredentials(false); 
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
@@ -100,4 +99,5 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 }
+
 

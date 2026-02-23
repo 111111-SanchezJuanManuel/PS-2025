@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -22,7 +22,6 @@ export class ArtistaDashboardComponent implements OnInit {
 
   dashboard: any;
 
-  // Charts
   entradasPorDiaChart: { name: string; value: number }[] = [];
   entradasPorTipoChart: { name: string; value: number }[] = [];
   rankingEventosChart: { name: string; value: number }[] = [];
@@ -68,21 +67,18 @@ export class ArtistaDashboardComponent implements OnInit {
   }
 
   private buildCharts(): void {
-    // Entradas por día
     const porDia = this.dashboard?.entradasPorDia || [];
     this.entradasPorDiaChart = porDia.map((p: any) => ({
-      name: p.fecha,                  // 'YYYY-MM-DD'
+      name: p.fecha,                  
       value: Number(p.cantidad ?? 0)
     }));
 
-    // Entradas por tipo
     const porTipo = this.dashboard?.entradasPorTipo || [];
     this.entradasPorTipoChart = porTipo.map((t: any) => ({
       name: t.tipoEntradaNombre,
       value: Number(t.cantidadVendida ?? 0)
     }));
 
-    // Ranking de eventos por asistencia
     const ranking = this.dashboard?.rankingEventos || [];
     this.rankingEventosChart = ranking.map((e: any) => ({
       name: e.eventoNombre,
@@ -105,3 +101,4 @@ export class ArtistaDashboardComponent implements OnInit {
     return new Intl.NumberFormat('es-AR').format(n);
   };
 }
+

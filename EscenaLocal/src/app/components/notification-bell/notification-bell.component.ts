@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+﻿import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Notificacion, NotificacionService } from '../../services/notificacion.service';
@@ -28,17 +28,13 @@ export class NotificationBellComponent {
   ) {}
 
   ngOnInit() {
-    // Solo tiene sentido si está logueado
     if (!this.isLoggedIn()) return;
 
     this.refreshBadge();
 
-    // opcional: refrescar cada X segundos
-    // setInterval(() => this.refreshBadge(), 15000);
   }
 
   isLoggedIn(): boolean {
-    // ajustá a tu AuthService real
     return !!this.auth.isLoggedIn?.() || !!this.auth.getToken?.();
   }
 
@@ -85,8 +81,6 @@ export class NotificationBellComponent {
   }
 
   onClickNotification(n: Notificacion) {
-    // si querés llevar a algún lado, acá.
-    // por ahora solo marca como leída si estaba no leída
     if (!n.leido) {
       this.notificationsService.markAsRead(n.id).subscribe({
         next: () => {
@@ -97,8 +91,6 @@ export class NotificationBellComponent {
       });
     }
 
-    // ejemplo: cerrar dropdown
-    // this.open = false;
   }
 
   markAll() {
@@ -111,13 +103,12 @@ export class NotificationBellComponent {
     });
   }
 
-  // cerrar dropdown si clickea afuera
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    // ajustá el selector según tu HTML
     if (!target.closest('.notif-bell')) {
       this.open = false;
     }
   }
 }
+

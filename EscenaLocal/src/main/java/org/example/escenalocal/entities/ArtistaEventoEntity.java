@@ -1,4 +1,4 @@
-package org.example.escenalocal.entities;
+﻿package org.example.escenalocal.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,9 +27,6 @@ public class ArtistaEventoEntity {
     @JoinColumn(name = "id_artista")
     private ArtistaEntity artista;
 
-    // (si tuvieras campos extra, agrégalos aquí)
-
-    // equals/hashCode por id embebido
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ArtistaEventoEntity that)) return false;
@@ -37,4 +34,5 @@ public class ArtistaEventoEntity {
     }
     @Override public int hashCode() { return Objects.hash(id); }
 }
+
 

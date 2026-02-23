@@ -1,4 +1,4 @@
-package org.example.escenalocal.controllers;
+﻿package org.example.escenalocal.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +38,10 @@ public class WebhookController {
 
   private Long extractPaymentId(Map<String, String> query, String bodyRaw) {
     try {
-      // Query string (data.id)
       if (query != null && query.containsKey("data.id")) {
         return Long.valueOf(query.get("data.id"));
       }
 
-      // Body JSON
       if (bodyRaw != null && !bodyRaw.isBlank()) {
         Map<String, Object> json = objectMapper.readValue(bodyRaw, Map.class);
         Map<String, Object> data = (Map<String, Object>) json.get("data");
@@ -58,5 +56,6 @@ public class WebhookController {
     return null;
   }
 }
+
 
 

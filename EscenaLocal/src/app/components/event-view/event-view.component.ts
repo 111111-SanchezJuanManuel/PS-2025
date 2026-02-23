@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import {
   EntradaDto,
   EventGet,
@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Corrige la ubicación de los íconos de Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -51,9 +50,8 @@ export class EventViewComponent {
   ) {}
 
   ngOnInit(): void {
-    // Obtener ID del evento desde la ruta
     this.route.params.subscribe((params) => {
-      this.eventoId = +params['id']; // El '+' convierte string a number
+      this.eventoId = +params['id']; 
       this.cargarEvento();
     });
   }
@@ -69,7 +67,6 @@ export class EventViewComponent {
     this.error = '';
     this.mapaInicializado = false;
 
-    // reset relacionados cuando cambia el evento
     this.relatedEvents = [];
 
     this.eventService.getEventById(this.eventoId).subscribe({
@@ -77,7 +74,6 @@ export class EventViewComponent {
         this.evento = data;
         this.loading = false;
 
-        // mapa
         if (data.direccion && !this.mapaInicializado) {
           this.mostrarMapa(
             this.evento.direccion.toString(),
@@ -98,7 +94,6 @@ export class EventViewComponent {
   }
 
   private cargarRelacionados(): void {
-    // si todavía no hay un evento válido, no hacemos nada
     if (!this.evento || !this.evento.id) return;
 
     this.loadingRelated = true;
@@ -106,7 +101,7 @@ export class EventViewComponent {
     this.eventService.getEvents().subscribe({
       next: (todos) => {
         const relacionados = this.calcularRelacionados(this.evento, todos);
-        this.relatedEvents = relacionados.slice(0, 8); // TOP 8
+        this.relatedEvents = relacionados.slice(0, 8); 
         this.loadingRelated = false;
       },
       error: (err) => {
@@ -129,7 +124,6 @@ export class EventViewComponent {
 
     const candidatos = (todos || [])
       .filter(e => e && e.id !== actualId)
-      // si querés mostrar solo activos:
       .filter(e => e.activo === true || e.activo === (true as any));
 
     const scored = candidatos.map(e => {
@@ -151,7 +145,6 @@ export class EventViewComponent {
 
       const matchArtista = comunes > 0;
 
-      // score (ajustable)
       let score = 0;
       if (matchEst) score += 3;
       if (matchGenero) score += 2;
@@ -160,10 +153,8 @@ export class EventViewComponent {
       return { e, score, comunes };
     });
 
-    // al menos 1 criterio
     const filtrados = scored.filter(x => x.score > 0);
 
-    // orden: score desc, luego artistas comunes desc, luego fecha desc (opcional)
     filtrados.sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       if (b.comunes !== a.comunes) return b.comunes - a.comunes;
@@ -177,7 +168,6 @@ export class EventViewComponent {
   }
 
   mostrarMapa(direccion: string, establecimiento: string, ciudad: string): void {
-    // Llamada a Photon para obtener coordenadas
     const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(
       direccion + ', ' + ciudad
     )}&limit=1&lang=en`;
@@ -212,7 +202,6 @@ export class EventViewComponent {
 
   comprarEntrada(entrada?: EntradaDto): void {
     if (entrada) {
-      // Navega con datos de la entrada específica
       this.router.navigate(['/checkout'], {
         queryParams: {
           eventoId: this.eventoId,
@@ -221,7 +210,6 @@ export class EventViewComponent {
         },
       });
     } else {
-      // Tu comportamiento original
       this.router.navigate(['/checkout']);
     }
   }
@@ -256,7 +244,7 @@ export class EventViewComponent {
   }
 
   getCapacidadInicial(entrada: EntradaDto): number {
-    return entrada.disponibilidad * 1.5; // Estimación para la barra de progreso
+    return entrada.disponibilidad * 1.5; 
   }
 
   verEstablecimiento(id: number): void {
@@ -267,3 +255,4 @@ export class EventViewComponent {
     this.router.navigate(['/eventos']);
   }
 }
+

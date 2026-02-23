@@ -1,4 +1,4 @@
-package org.example.escenalocal.dtos.post;
+﻿package org.example.escenalocal.dtos.post;
 
 import lombok.Data;
 import jakarta.validation.constraints.Email;
@@ -24,7 +24,7 @@ public class PostArtistaDto {
     private String red_social;
 
     @NotNull(message = "El genero no puede ser nulo")
-//    @Size(min = 1, max = 50, message = "El genero debe tener entre 1 y 50 caracteres")
     private Long genero;
 
 }
+

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -15,7 +15,6 @@ export interface NotificationBadge {
 
 @Injectable({ providedIn: 'root' })
 export class NotificacionService {
-  // AJUSTÁ según tu backend real
   private baseUrl = 'http://localhost:8080/api/notificaciones';
 
   constructor(private http: HttpClient) {}
@@ -42,7 +41,6 @@ export class NotificacionService {
   }
 
   getMyNotifications(page = 0, size = 10): Observable<any> {
-    // backend devuelve Page<NotificacionItemDto>
     return this.http.get<any>(`${this.baseUrl}/me`, { params: { page, size } as any });
   }
 
@@ -54,3 +52,4 @@ export class NotificacionService {
     return this.http.patch<void>(`${this.baseUrl}/me/read-all`, {});
   }
 }
+

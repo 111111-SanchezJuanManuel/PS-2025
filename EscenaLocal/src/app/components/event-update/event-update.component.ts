@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -22,27 +22,22 @@ import { EventGet, EventService } from '../../services/event.service';
 export class EventUpdateComponent {
   eventForm: FormGroup;
 
-  // catálogos
   artistas: any[] = [];
   productores: any[] = [];
   tiposEntrada: any[] = [];
   establecimientos: any[] = [];
   clasificaciones: any[] = [];
 
-  // ui state
   isLoading = false;
   submitted = false;
 
-  // imagen
   selectedFile: File | null = null;
   imagePreview: string | null = null;
   imagenActual: string | null = null;
 
-  // artistas seleccionados en este evento (array de IDs numéricos)
   artistasSeleccionados: number[] = [];
-  artistaSeleccionado: string = ''; // valor temporal del <select> para agregar artista
+  artistaSeleccionado: string = ''; 
 
-  // entradas / tickets seleccionadas para este evento
   tiposEntradaSeleccionados: any[] = [];
   tipoEntradaSeleccionado: string = '';
   precioEntrada: number | null = null;
@@ -66,13 +61,10 @@ export class EventUpdateComponent {
       hora: ['', Validators.required],
       imagen: [''],
       activo: [true],
-      artistaId: this.fb.control<number[]>([]), // no lo usamos directo en la vista, pero lo dejamos coherente
+      artistaId: this.fb.control<number[]>([]), 
     });
   }
 
-  // =========================
-  // Ciclo de vida / carga inicial
-  // =========================
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.eventoId = +params['id'];
@@ -93,12 +85,7 @@ export class EventUpdateComponent {
     });
   }
 
-  /**
-   * Trae en paralelo:
-   * - el evento
-   * - todos los catálogos (artistas, productores, etc)
-   * y recién después popula el form + artistasSeleccionados + tiposEntradaSeleccionados.
-   */
+  
   private cargarTodo(): void {
     this.isLoading = true;
 
@@ -118,14 +105,12 @@ export class EventUpdateComponent {
         establecimientos,
         clasificaciones,
       }) => {
-        // guardo catálogos en memoria para combos
         this.artistas = artistas;
         this.productores = productores;
         this.tiposEntrada = tiposEntrada;
         this.establecimientos = establecimientos;
         this.clasificaciones = clasificaciones;
 
-        // mapear IDs reales de productor / establecimiento / clasificacion
         const productorId = this.mapNombreToId(
           evento.productor,
           this.productores,
@@ -144,20 +129,17 @@ export class EventUpdateComponent {
           'clasificacion'
         );
 
-        // rellenar formulario principal
         this.eventForm.patchValue({
           nombreEvento: evento.evento,
           descripcion: evento.descripcion,
           productorId: productorId ?? '',
           establecimientoId: establecimientoId ?? '',
           clasificacionId: clasificacionId ?? '',
-          fecha: evento.fecha, // "2025-10-03"
-          hora: evento.hora, // "21:30"
+          fecha: evento.fecha, 
+          hora: evento.hora, 
           activo: evento.activo,
         });
 
-        // artistasSeleccionados = IDs reales según los nombres que vinieron en `evento.artistas`
-        // backend: evento.artistas = ["Artista1", "Artista2", ...]
         this.artistasSeleccionados = this.artistas
           .filter(
             (a) =>
@@ -166,8 +148,6 @@ export class EventUpdateComponent {
           )
           .map((a) => a.id);
 
-        // Tipos de entrada ya configurados en el evento
-        // backend: entradasDetalle = [{ tipo:"VIP", precio:7000, disponibilidad:50 }]
         this.tiposEntradaSeleccionados = Array.isArray(evento.entradasDetalle)
           ? evento.entradasDetalle.map((entrada: any) => {
               const encontrado = this.matchEntradaToCatalogo(entrada);
@@ -179,11 +159,6 @@ export class EventUpdateComponent {
               };
             })
           : [];
-
-        // imagen actual: tu JSON no la trae, así que no seteamos.
-        // si más adelante el backend manda base64 en evento.imagen:
-        // this.imagenActual = evento.imagen;
-        // this.imagePreview = evento.imagen;
 
         this.isLoading = false;
       },
@@ -202,16 +177,7 @@ export class EventUpdateComponent {
     });
   }
 
-  // =========================
-  // Helpers de mapeo catálogos -> IDs
-  // =========================
-
-  /**
-   * Dado el nombre textual que manda el backend (ej "Productora1")
-   * busca el item correspondiente del catálogo y devuelve su id.
-   * listaCatalogo es por ej this.productores
-   * campoNombreCatalogo es el atributo que contiene el nombre visible en ese catálogo ("nombre", "establecimiento", "clasificacion", etc.)
-   */
+  
   private mapNombreToId(
     nombreDelEvento: string,
     listaCatalogo: any[],
@@ -224,20 +190,11 @@ export class EventUpdateComponent {
     return encontrado ? encontrado.id : undefined;
   }
 
-  /**
-   * Busca un tipo de entrada del catálogo `this.tiposEntrada`
-   * que coincida con la info del evento.
-   * - entrada.tipo viene como string legible ("VIP")
-   * - en catálogo tenemos objetos tipo { id: 12, entrada: "VIP" }
-   */
+  
   private matchEntradaToCatalogo(entradaEvento: any) {
     if (!entradaEvento) return null;
     return this.tiposEntrada.find((t) => t.entrada === entradaEvento.tipo);
   }
-
-  // =========================
-  // Artistas (UI add/remove)
-  // =========================
 
   agregarArtista(): void {
     if (!this.artistaSeleccionado) return;
@@ -264,10 +221,6 @@ export class EventUpdateComponent {
       (artista) => !this.artistasSeleccionados.includes(artista.id)
     );
   }
-
-  // =========================
-  // Tipos de entrada (UI add/remove)
-  // =========================
 
   agregarTipoEntrada(): void {
     if (
@@ -336,10 +289,6 @@ export class EventUpdateComponent {
     }, 0);
   }
 
-  // =========================
-  // Imagen
-  // =========================
-
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -372,10 +321,6 @@ export class EventUpdateComponent {
     this.eventForm.patchValue({ imagen: '' });
     this.eventForm.get('imagen')?.updateValueAndValidity();
   }
-
-  // =========================
-  // Submit / confirmación / PUT
-  // =========================
 
   get f() {
     return this.eventForm.controls;
@@ -479,7 +424,6 @@ export class EventUpdateComponent {
       },
     });
 
-    // armamos las entradasDetalle para el backend
     const entradasDetalle = this.tiposEntradaSeleccionados.map((entrada) => ({
       tipo: entrada.tipoEntradaId,
       precio: entrada.precio,
@@ -489,7 +433,7 @@ export class EventUpdateComponent {
     const dto = {
       evento: this.eventForm.get('nombreEvento')?.value,
       descripcion: this.eventForm.get('descripcion')?.value,
-      artistaId: this.artistasSeleccionados, // <- IDs listos
+      artistaId: this.artistasSeleccionados, 
       productorId: this.eventForm.get('productorId')?.value,
       entradasDetalle: entradasDetalle,
       establecimientoId: this.eventForm.get('establecimientoId')?.value,
@@ -546,7 +490,6 @@ export class EventUpdateComponent {
 
   resetForm(): void {
     this.submitted = false;
-    // volvemos a pedir todo del backend para refrescar
     this.cargarTodo();
 
     this.artistaSeleccionado = '';
@@ -560,3 +503,4 @@ export class EventUpdateComponent {
     this.router.navigate(['/eventos']);
   }
 }
+

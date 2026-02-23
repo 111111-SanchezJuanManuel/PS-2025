@@ -1,4 +1,4 @@
-package org.example.escenalocal.entities;
+﻿package org.example.escenalocal.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +16,11 @@ public class Notificacion {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long userId; // o una relación @ManyToOne con User
+  private Long userId; 
   private String mensaje;
   private boolean leido = false;
   private LocalDateTime creado = LocalDateTime.now();
 
-  // Getters y Setters
 }
+
 

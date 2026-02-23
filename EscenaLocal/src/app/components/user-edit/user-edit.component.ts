@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
@@ -11,14 +11,12 @@ import { AuthService } from '../../services/auth.service';
   imports: [CommonModule, FormsModule],
 })
 export class UserEditComponent implements OnInit {
-  // modelo principal del formulario
   model = {
     username: '',
     email: '',
-    password: '', // opcional
+    password: '', 
   };
 
-  // campos extendidos
   nombre = '';
   representante = '';
   telefono_representante = '';
@@ -26,17 +24,15 @@ export class UserEditComponent implements OnInit {
   idGenero: number | null = null;
   generos: any[] = [];
 
-  // imagen
   selectedFile: File | null = null;
   imagenUrl: string | null = null;
 
-  // estado
   error = '';
   success = '';
   loading = true;
 
   private userId!: number;
-  esArtistaProd = false; // 🔸 controla la visibilidad de campos extendidos
+  esArtistaProd = false; 
 
   constructor(
     private usuarioService: UsuarioService,
@@ -54,32 +50,26 @@ export class UserEditComponent implements OnInit {
 
     this.userId = Number(idFromToken);
 
-    // cargar datos del usuario logueado
     this.usuarioService.getUsuarioById(this.userId).subscribe({
       next: (u: any) => {
-        // datos básicos
         this.model.username = u.username || '';
         this.model.email = u.email || '';
 
-        // detectar rol y activar flag
         const rol = u.rol || '';
         if (rol === 'ROL_ARTISTA' || rol === 'ROL_PRODUCTOR') {
           this.esArtistaProd = true;
         }
 
-        // datos extendidos
         this.nombre = u.nombre || '';
         this.representante = u.representante || '';
         this.telefono_representante = u.telefono_representante || '';
         this.red_social = u.red_social || '';
         this.idGenero = u.idGenero || u.genero?.id || null;
 
-        // imagen actual
         if (u.id) {
           this.imagenUrl = `http://localhost:8080/auth/${u.id}/imagen`;
         }
 
-        // cargar géneros solo si es artista
         if (rol === 'ROL_ARTISTA') {
           this.usuarioService.getGeneros().subscribe({
             next: (gs) => (this.generos = gs),
@@ -97,7 +87,6 @@ export class UserEditComponent implements OnInit {
   }
 
   esArtista(): boolean {
-    // si querés mantener esta función para mostrar el select de género
     return this.authService.tieneRol('ROL_ARTISTA');
   }
 
@@ -149,3 +138,4 @@ export class UserEditComponent implements OnInit {
     });
   }
 }
+

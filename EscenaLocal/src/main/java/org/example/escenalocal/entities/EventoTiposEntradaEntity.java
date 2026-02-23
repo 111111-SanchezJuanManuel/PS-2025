@@ -1,4 +1,4 @@
-package org.example.escenalocal.entities;
+﻿package org.example.escenalocal.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,6 @@ public class EventoTiposEntradaEntity {
 
     private Integer disponibilidad;
 
-    // equals/hashCode por id embebido
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof EventoTiposEntradaEntity that)) return false;
@@ -41,3 +40,4 @@ public class EventoTiposEntradaEntity {
     }
     @Override public int hashCode() { return Objects.hash(id); }
 }
+

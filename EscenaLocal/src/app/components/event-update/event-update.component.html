@@ -1,4 +1,4 @@
-<div class="container mt-5">
+﻿<div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card shadow">
@@ -9,7 +9,7 @@
           </h3>
         </div>
         <div class="card-body">
-          <!-- Spinner de carga -->
+          
           <div class="text-center py-5" *ngIf="isLoading">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
               <span class="visually-hidden">Cargando evento...</span>
@@ -19,7 +19,7 @@
 
           <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
             
-            <!-- Nombre del Evento -->
+            
             <div class="mb-3">
               <label for="nombreEvento" class="form-label">Nombre del Evento</label>
               <input 
@@ -35,7 +35,7 @@
               </div>
             </div>
 
-            <!-- Descripción -->
+            
             <div class="mb-3">
               <label for="descripcion" class="form-label">Descripción</label>
               <textarea 
@@ -54,11 +54,11 @@
               </small>
             </div>
 
-            <!-- Artistas (Múltiples) -->
+            
             <div class="mb-3">
               <label class="form-label">Artistas</label>
               
-              <!-- Selector de Artista -->
+              
               <div class="input-group">
                 <select 
                   class="form-select" 
@@ -79,11 +79,11 @@
                 </button>
               </div>
 
-              <!-- Lista de Artistas Seleccionados -->
+              
               <div class="mt-3" *ngIf="artistasSeleccionados.length > 0">
                 <label class="form-label fw-bold">Artistas agregados:</label>
                 <div class="list-group">
-                  <!-- artistaId es el ID numérico que guardamos en artistasSeleccionados -->
+                  
                   <div *ngFor="let artistaId of artistasSeleccionados; let i = index" 
                        class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
@@ -100,13 +100,13 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación -->
+              
               <div class="text-danger small mt-2" *ngIf="submitted && artistasSeleccionados.length === 0">
                 Debe agregar al menos un artista
               </div>
             </div>
 
-            <!-- Productor -->
+            
             <div class="mb-3">
               <label for="productorId" class="form-label">Productor</label>
               <select 
@@ -124,11 +124,11 @@
               </div>
             </div>
 
-            <!-- Tipos de Entrada (Múltiples con precio y disponibilidad) -->
+            
             <div class="mb-3">
               <label class="form-label">Tipos de Entrada</label>
               
-              <!-- Selector de Tipo de Entrada con Precio y Disponibilidad -->
+              
               <div class="card bg-light p-3">
                 <div class="row g-3">
                   <div class="col-md-6">
@@ -176,7 +176,7 @@
                 </button>
               </div>
 
-              <!-- Lista de Tipos de Entrada Seleccionados -->
+              
               <div class="mt-3" *ngIf="tiposEntradaSeleccionados.length > 0">
                 <label class="form-label fw-bold">Entradas configuradas:</label>
                 <div class="list-group">
@@ -210,13 +210,13 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación -->
+              
               <div class="text-danger small mt-2" *ngIf="submitted && tiposEntradaSeleccionados.length === 0">
                 Debe agregar al menos un tipo de entrada
               </div>
             </div>
 
-            <!-- Establecimiento -->
+            
             <div class="mb-3">
               <label for="establecimientoId" class="form-label">Establecimiento</label>
               <select 
@@ -234,7 +234,7 @@
               </div>
             </div>
 
-            <!-- Clasificación -->
+            
             <div class="mb-3">
               <label for="clasificacionId" class="form-label">Clasificación</label>
               <select 
@@ -252,7 +252,7 @@
               </div>
             </div>
 
-            <!-- Fecha -->
+            
             <div class="mb-3">
               <label for="fecha" class="form-label">Fecha del Evento</label>
               <input 
@@ -266,7 +266,7 @@
               </div>
             </div>
 
-            <!-- Hora -->
+            
             <div class="mb-3">
               <label for="hora" class="form-label">Hora del Evento</label>
               <input 
@@ -280,7 +280,7 @@
               </div>
             </div>
 
-            <!-- Imagen -->
+            
             <div class="mb-3">
               <label for="imagen" class="form-label">
                 Imagen del Evento
@@ -298,7 +298,7 @@
                 Seleccione una imagen solo si desea cambiar la actual
               </small>
               
-              <!-- Preview de la imagen -->
+              
               <div class="mt-3" *ngIf="imagePreview">
                 <div class="position-relative d-inline-block">
                   <img 
@@ -324,7 +324,7 @@
               </div>
             </div>
 
-            <!-- Estado Activo/Inactivo -->
+            
             <div class="mb-3">
               <div class="form-check form-switch">
                 <input 
@@ -347,7 +347,7 @@
               </small>
             </div>
 
-            <!-- Botones -->
+            
             <div class="d-grid gap-2 d-md-flex justify-content-md-between">
               <button type="button" class="btn btn-secondary" (click)="volver()">
                 <i class="bi bi-arrow-left"></i> Volver
@@ -375,3 +375,4 @@
     </div>
   </div>
 </div>
+

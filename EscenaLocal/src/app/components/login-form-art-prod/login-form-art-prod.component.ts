@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import {
   AuthRequest,
   AuthService,
@@ -22,7 +22,6 @@ interface Genero {
   styleUrl: './login-form-art-prod.component.css'
 })
 export class LoginFormArtProdComponent implements OnInit {
-  // login / registro básico
   model: AuthRequest = { username: '', password: '', email: '', rol: '' };
   selectedRolId: number | null = null;
   selectedFile: File | null = null;
@@ -30,13 +29,11 @@ export class LoginFormArtProdComponent implements OnInit {
   error: string | null = null;
   roles: Rol[] = [];
 
-  // 👇 datos comunes a Artista y Productor
   nombre: string = '';
   representante: string = '';
   telefono_representante: string = '';
   red_social: string = '';
 
-  // 👇 solo para artista
   generos: Genero[] = [];
   idGenero: number | null = null;
 
@@ -48,7 +45,7 @@ export class LoginFormArtProdComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarRoles();
-    this.cargarGeneros(); // para el caso de artista
+    this.cargarGeneros(); 
   }
 
   onFileSelected(event: any) {
@@ -58,7 +55,6 @@ export class LoginFormArtProdComponent implements OnInit {
 
   
 onSubmit() {
-  // Este componente se usa para registrar artistas/productores
   this.modoRegistro = true;
 
   if (!this.selectedRolId) {
@@ -71,7 +67,6 @@ onSubmit() {
   const esArtista = rolSeleccionado?.rol === 'ROL_ARTISTA';
   const esProductor = rolSeleccionado?.rol === 'ROL_PRODUCTOR';
 
-  // ---- Registro ARTISTA / PRODUCTOR ----
   if (esArtista || esProductor) {
     const payload: any = {
       username: this.model.username,
@@ -93,7 +88,6 @@ onSubmit() {
   const userId = Number(res.userId);
   const token = res.token;
 
-  // si hay imagen, subir primero; después "loguear" con el AuthService
   if (this.selectedFile) {
     this.usuarioService.subirImagen(userId, this.selectedFile).subscribe({
       next: () => {
@@ -118,10 +112,9 @@ onSubmit() {
       }
     });
 
-    return; // salimos, ya hicimos el registro completo
+    return; 
   }
 
-  // ---- Registro normal (usuario común) ----
   const data: RegisterRequest = {
     username: this.model.username,
     password: this.model.password,
@@ -155,7 +148,7 @@ onSubmit() {
   cargarGeneros() {
   this.usuarioService.getGeneros().subscribe({
     next: (data) => {
-      console.log('Géneros cargados:', data); // 👈 agregá esto
+      console.log('Géneros cargados:', data); 
       this.generos = data;
     },
     error: (err) => console.error('Error al cargar géneros:', err)
@@ -170,7 +163,7 @@ onSubmit() {
   if (!this.roles || this.roles.length === 0) return false;
   if (this.selectedRolId == null) return false;
 
-  const selId = Number(this.selectedRolId); // 👈 forzamos a número
+  const selId = Number(this.selectedRolId); 
   const rolSel = this.roles.find(r => r.id === selId);
   const nombreRol = rolSel?.rol || '';
 
@@ -178,3 +171,4 @@ onSubmit() {
 }
 
 }
+

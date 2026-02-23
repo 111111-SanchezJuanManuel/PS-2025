@@ -1,14 +1,11 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EstablishmentService } from '../../services/establishment.service';
-//agregado
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-//agregado
-// Corrige la ubicación de los íconos de Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -38,7 +35,6 @@ export class EstablishmentComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  //agregado
   mapaInicializado: boolean = false;
 
   constructor(
@@ -77,13 +73,11 @@ export class EstablishmentComponent implements OnInit {
     });
   }
 
-  //agregado
   mostrarMapa(
     direccion: string,
     establecimiento: string,
     ciudad: string
   ): void {
-    // Llamada a Photon para obtener coordenadas
     const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(
       direccion + ', ' + ciudad
     )}&limit=1&lang=en`;
@@ -120,3 +114,4 @@ export class EstablishmentComponent implements OnInit {
     history.back();
   }
 }
+

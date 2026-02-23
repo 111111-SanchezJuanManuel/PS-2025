@@ -1,4 +1,4 @@
-package org.example.escenalocal.services.impl;
+﻿package org.example.escenalocal.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadopago.client.payment.PaymentClient;
@@ -21,7 +21,6 @@ public class  MercadopagoServiceImpl implements MercadopagoService {
   private final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
 
-  // Inyectamos el access token desde application.yml
   @Value("${mercadopago.access-token}")
   private String accessToken;
 
@@ -101,3 +100,4 @@ public class  MercadopagoServiceImpl implements MercadopagoService {
 
 
 }
+

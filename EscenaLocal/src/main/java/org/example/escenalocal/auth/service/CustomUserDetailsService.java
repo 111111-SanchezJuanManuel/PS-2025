@@ -1,4 +1,4 @@
-package org.example.escenalocal.auth.service;
+﻿package org.example.escenalocal.auth.service;
 
 import org.example.escenalocal.entities.UsuarioEntity;
 import org.example.escenalocal.auth.repository.UserRepository;
@@ -21,7 +21,6 @@ public class CustomUserDetailsService implements UserDetailsService {
       .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
 
-    // Crear una lista con una sola autoridad
     List<GrantedAuthority> authorities =
       List.of(new SimpleGrantedAuthority(u.getRol().getRol()));
 
@@ -33,3 +32,4 @@ public class CustomUserDetailsService implements UserDetailsService {
     );
   }
 }
+

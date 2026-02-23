@@ -1,30 +1,30 @@
-.btn-orange {
-  background-color: #ff7b00;       /* Naranja principal */
+﻿.btn-orange {
+  background-color: #ff7b00;       
   color: white;
   border: none;
-  border-radius: 8px;              /* Bordes suaves */
+  border-radius: 8px;              
   padding: 10px 20px;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.25s ease;      /* Transiciones suaves */
+  transition: all 0.25s ease;      
   box-shadow: 0 4px 10px rgba(255, 123, 0, 0.3);
 }
 
 .btn-orange:hover {
-  background-color: #ff9500;       /* Un poco más claro al pasar el mouse */
+  background-color: #ff9500;       
   box-shadow: 0 6px 14px rgba(255, 149, 0, 0.4);
-  transform: translateY(-2px);     /* Efecto de elevación */
+  transform: translateY(-2px);     
 }
 
 .btn-orange:active {
-  background-color: #e56b00;       /* Más oscuro al presionar */
-  transform: translateY(1px);      /* Efecto de presión */
+  background-color: #e56b00;       
+  transform: translateY(1px);      
   box-shadow: 0 3px 6px rgba(229, 107, 0, 0.3);
 }
 
 .btn-orange:disabled {
-  background-color: #ffb366;       /* Tono apagado cuando está deshabilitado */
+  background-color: #ffb366;       
   cursor: not-allowed;
   box-shadow: none;
   opacity: 0.7;

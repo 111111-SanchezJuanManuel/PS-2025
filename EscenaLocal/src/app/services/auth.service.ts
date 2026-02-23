@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
@@ -35,35 +35,24 @@ export class AuthService {
   private tokenKey = 'auth_token';
   private userIdKey = 'userId';
 
-  // estado reactivo
   private loggedIn$ = new BehaviorSubject<boolean>(!!this.getToken());
   private avatarUrl$ = new BehaviorSubject<string | null>(null);
 
-  // expuestos
   loginState$ = this.loggedIn$.asObservable();
   avatarState$ = this.avatarUrl$.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  // =====================
-  // AUTH HTTP CALLS
-  // =====================
-
   login(request: AuthRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request).pipe(
       tap((response) => {
-        // 1) guardo token con la key correcta
         this.saveToken(response.token);
         console.log('LOGIN RESPONSE:', response);
         console.log('TOKEN GUARDADO:', localStorage.getItem('auth_token'));
-        // 2) guardo userId
         localStorage.setItem(this.userIdKey, response.userId.toString());
 
-        // 3) emito que hay login
         this.loggedIn$.next(true);
 
-        // 4) emito la URL de la imagen para navbar/perfil
-        // tu endpoint: GET /auth/{id}/imagen
         const imgUrl = `${this.apiUrl}/${response.userId}/imagen?ts=${Date.now()}`;
         this.setAvatar(imgUrl);
       })
@@ -81,7 +70,6 @@ export class AuthService {
       formData.append('imagen', data.imagen);
     }
 
-    // si tu backend devuelve también token y userId en el register
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, formData).pipe(
       tap((response) => {
         if (response?.token) {
@@ -100,10 +88,6 @@ export class AuthService {
     return this.http.get<Rol[]>(`${this.apiUrl}/roles`);
   }
 
-  // =====================
-  // TOKEN STORAGE
-  // =====================
-
   saveToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
   }
@@ -120,10 +104,6 @@ export class AuthService {
     const raw = localStorage.getItem(this.userIdKey);
     return raw ? Number(raw) : null;
   }
-
-  // =====================
-  // JWT UTILS
-  // =====================
 
   private decodeToken(token: string): any {
     try {
@@ -170,10 +150,6 @@ export class AuthService {
     return realRole === selectedRole;
   }
 
-  // =====================
-  // LOGIN STATE HELPERS
-  // =====================
-
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
@@ -185,10 +161,6 @@ export class AuthService {
     this.avatarUrl$.next(null);
     this.clearProductorId();
   }
-
-  // =====================
-  // AVATAR
-  // =====================
 
   setAvatar(url: string | null): void {
     this.avatarUrl$.next(url);
@@ -215,7 +187,6 @@ export class AuthService {
   const decoded = this.decodeToken(token);
   if (!decoded) return null;
 
-  // probables nombres según cómo lo armes en el backend
   return (
     decoded.productorId ??
     decoded.idProductor ??
@@ -232,12 +203,9 @@ export class AuthService {
     const decoded = this.decodeToken(token);
     if (!decoded) return null;
 
-    // en tu back dijiste que generabas algo como jwtUtil.generateToken(u.getUsername(), u.getRol().getRol());
-    // así que probablemente venga como "role" o "rol"
     return decoded.role || decoded.rol || null;
   }
 
-  // 👉 este es el que te faltaba
   tieneRol(rol: string): boolean {
     const userRol = this.getUserRoleFromToken();
     return userRol === rol;
@@ -276,19 +244,17 @@ clearProductorId(): void {
 }
 
 setSession(token: string, userId: number): void {
-  // token + userId con las KEYS correctas del servicio
   this.saveToken(token);
   localStorage.setItem(this.userIdKey, String(userId));
 
-  // emito estado logueado
   this.loggedIn$.next(true);
 
-  // emito avatar (para navbar/perfil)
   const imgUrl = `${this.apiUrl}/${userId}/imagen?ts=${Date.now()}`;
   this.setAvatar(imgUrl);
 }
 
 }
+
 
 
 

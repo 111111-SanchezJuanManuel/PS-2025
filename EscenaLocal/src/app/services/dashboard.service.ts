@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProductorDashboardDto } from '../models/dashboard.model';
@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 })
 export class DashboardService {
 
-  private apiUrl = environment.apiBaseLocal; // ej: 'http://localhost:8080/api'
+  private apiUrl = environment.apiBaseLocal; 
 
   constructor(private http: HttpClient) {}
 
@@ -29,3 +29,4 @@ getDashboardArtista(from: string, to: string, artistaId: number) {
 }
 
 }
+

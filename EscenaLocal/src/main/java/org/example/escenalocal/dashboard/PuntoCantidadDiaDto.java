@@ -1,4 +1,4 @@
-package org.example.escenalocal.dashboard;
+﻿package org.example.escenalocal.dashboard;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,6 @@ public class PuntoCantidadDiaDto {
   private LocalDate fecha;
   private Long cantidad;
 
-  // ✅ Hibernate siempre lo puede matchear (DATE(...) -> Object, SUM(...) -> Number)
   public PuntoCantidadDiaDto(Object fecha, Number cantidad) {
     this.fecha = toLocalDate(fecha);
     this.cantidad = (cantidad != null) ? cantidad.longValue() : 0L;
@@ -26,7 +25,6 @@ public class PuntoCantidadDiaDto {
     if (value instanceof LocalDateTime ldt) return ldt.toLocalDate();
     if (value instanceof java.sql.Date sd) return sd.toLocalDate();
 
-    // por si Hibernate devuelve java.util.Date / Timestamp
     if (value instanceof java.util.Date d) {
       return new java.sql.Date(d.getTime()).toLocalDate();
     }
@@ -34,3 +32,4 @@ public class PuntoCantidadDiaDto {
     throw new IllegalArgumentException("Tipo de fecha no soportado: " + value.getClass());
   }
 }
+

@@ -1,15 +1,15 @@
-<nav class="navbar navbar-custom px-3">
-  <!-- Logo / Imagen izquierda -->
+﻿<nav class="navbar navbar-custom px-3">
+  
   <a class="navbar-brand d-flex align-items-center" href="#">
     <img src="assets/img/logo.png" alt="logo" width="80" height="80">
   </a>
 
-  <!-- Buscador -->
+  
   <div class="d-flex mt-3; align-items-center">
     
      <app-event-search></app-event-search>
     
-    <!-- Ayuda -->
+    
     <li class="nav-item me-3" style="margin-left: 40px; list-style: none;">
       <a class="nav-link text-light" href="/ayuda">
         <i class="bi bi-question-circle fs-3"></i>
@@ -17,43 +17,20 @@
     </li>
   </div>
 
-  <!-- Notificaciones y Usuario -->
+  
   <ul class="navbar-nav d-flex flex-row ms-auto align-items-center">
     <li *ngIf="isLoggedIn()">
       <app-notification-bell></app-notification-bell>
     </li>
     
 
-    <!-- Campanita con dropdown -->
-    <!-- <li *ngIf="isLoggedIn()" class="nav-item dropdown me-3 position-relative">
-      <a class="nav-link d-flex align-items-center text-light" href="#" id="notificacionesDropdown" role="button"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-bell fs-3"></i>
-        <span *ngIf="unreadCount > 0"
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          {{ unreadCount }}
-        </span>
-      </a> -->
+    
+    
 
-      <!-- Menú desplegable de notificaciones -->
-      <!-- <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-2 custom-dropdown"
-        aria-labelledby="notificacionesDropdown" style="position: absolute; top: 100%; right: 0; min-width: 280px;">
+      
+      
 
-        <li *ngIf="notificaciones.length === 0" class="dropdown-item text-muted text-center py-2">
-          Sin notificaciones
-        </li>
-
-        <ng-container *ngFor="let n of notificaciones">
-          <li>
-            <button class="dropdown-item custom-item" (click)="abrirNotificacion(n)">
-              {{ n.mensaje }}
-            </button>
-          </li>
-        </ng-container>
-      </ul>
-    </li> -->
-
-    <!-- Usuario con dropdown -->
+    
     <li class="nav-item dropdown">
       <a class="nav-link d-flex align-items-center text-light" href="#" id="usuarioDropdown" role="button"
         data-bs-toggle="dropdown" aria-expanded="false">

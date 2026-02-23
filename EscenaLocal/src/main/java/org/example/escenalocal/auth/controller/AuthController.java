@@ -1,4 +1,4 @@
-package org.example.escenalocal.auth.controller;
+﻿package org.example.escenalocal.auth.controller;
 
 import org.example.escenalocal.auth.dtos.*;
 import org.example.escenalocal.auth.repository.RolRepository;
@@ -78,7 +78,6 @@ public class AuthController {
     return ResponseEntity.ok(authService.register(req));
   }
 
-  // endpoint de prueba protegido
   @GetMapping("/hello")
   public ResponseEntity<String> hello() {
     return ResponseEntity.ok("Hola, estás autenticado");
@@ -123,7 +122,6 @@ public class AuthController {
 
     String rolNombre = usuario.getRol().getRol();
 
-    // ARTISTA
     if ("ROL_ARTISTA".equals(rolNombre)) {
       artistaRepo.findByUsuario(usuario).ifPresent(artista -> {
         dto.setIdArtista(artista.getId());
@@ -138,7 +136,6 @@ public class AuthController {
       });
     }
 
-    // PRODUCTOR
     if ("ROL_PRODUCTOR".equals(rolNombre)) {
       productorRepo.findByUsuario(usuario).ifPresent(productor -> {
         dto.setIdProductor(productor.getId());
@@ -155,12 +152,10 @@ public class AuthController {
   @PostMapping("register/art-prod")
   public ResponseEntity<AuthResponse> registrar(@RequestBody PostArtProdDto req) {
 
-    // 1) validar usuario
     if (userRepo.existsByUsername(req.getUsername())) {
       throw new RuntimeException("El usuario ya existe");
     }
 
-    // 2) determinar rol según tipo
     String rolNombre = switch (req.getTipo()) {
       case "ARTISTA" -> "ROL_ARTISTA";
       case "PRODUCTOR" -> "ROL_PRODUCTOR";
@@ -170,7 +165,6 @@ public class AuthController {
     RolEntity rol = rolRepository.findByRol(rolNombre)
       .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rolNombre));
 
-    // 3) crear usuario
     UsuarioEntity user = new UsuarioEntity();
     user.setUsername(req.getUsername());
     user.setPassword(passwordEncoder.encode(req.getPassword()));
@@ -178,7 +172,6 @@ public class AuthController {
     user.setRol(rol);
     userRepo.save(user);
 
-    // 4) crear entidad específica con campos comunes
     if ("ARTISTA".equals(req.getTipo())) {
       ArtistaEntity artista = new ArtistaEntity();
       artista.setNombre(req.getNombre());
@@ -203,7 +196,6 @@ public class AuthController {
       productorRepo.save(productor);
     }
 
-    // 5) devolver token + id usuario
     String token = jwtUtil.generateToken(user.getUsername(), user.getRol().getRol());
     notificacionService.createBinvenidaNotificacion(user.getId());
     return ResponseEntity.ok(new AuthResponse(token, user.getId()));
@@ -217,7 +209,6 @@ public class AuthController {
     UsuarioEntity usuario = userRepo.findById(id)
       .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    // datos básicos
     usuario.setUsername(dto.getUsername());
     usuario.setEmail(dto.getEmail());
     if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
@@ -227,7 +218,6 @@ public class AuthController {
 
     String rolNombre = usuario.getRol().getRol();
 
-    // si es artista
     if ("ROL_ARTISTA".equals(rolNombre)) {
       artistaRepo.findByUsuario(usuario).ifPresent(artista -> {
         artista.setNombre(dto.getNombre());
@@ -241,7 +231,6 @@ public class AuthController {
       });
     }
 
-    // si es productor
     if ("ROL_PRODUCTOR".equals(rolNombre)) {
       productorRepo.findByUsuario(usuario).ifPresent(productor -> {
         productor.setNombre(dto.getNombre());
@@ -306,3 +295,4 @@ public class AuthController {
   }
 
 }
+

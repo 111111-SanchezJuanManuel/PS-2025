@@ -1,4 +1,4 @@
-package org.example.escenalocal.dashboard;
+﻿package org.example.escenalocal.dashboard;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +22,10 @@ public class EventoRankingDto {
                           Long entradasVendidas) {
     this.eventoId = eventoId;
     this.eventoNombre = eventoNombre;
-    // convertimos el Long a BigDecimal
     this.recaudacion = (recaudacion != null)
       ? BigDecimal.valueOf(recaudacion)
       : BigDecimal.ZERO;
     this.entradasVendidas = entradasVendidas;
   }
 }
+

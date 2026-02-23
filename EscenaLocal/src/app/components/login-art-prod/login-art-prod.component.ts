@@ -1,4 +1,4 @@
-import {
+﻿import {
   Component,
   ElementRef,
   OnInit,
@@ -48,55 +48,7 @@ export class LoginArtProdComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
-  /* onSubmit() {
-    this.error = null;
-    console.log('Rol seleccionado:', this.model.rol);
-
-    // pequeña validación por las dudas
-    if (!this.model.rol) {
-      this.error = 'Seleccione un rol.';
-      return;
-    }
-
-     console.log('voy a loguear con:', this.model);
-
-    this.authService.login(this.model).subscribe({
-      next: (res) => {
-        // 1) guardo el token en el servicio
-        this.authService.saveToken(res.token);
-
-        // 2) comparo el rol elegido vs el rol real del token
-        const ok = this.authService.validateSelectedRole(this.model.rol);
-        if (!ok) {
-          // si no coincide, limpio token y aviso
-          this.authService.clearToken();
-          this.error =
-            'El rol seleccionado no coincide con el rol asignado al usuario.';
-          return;
-        }
-
-        // 3) si coincide, guardo el id de usuario (esto sí en localStorage como ya lo hacías)
-        localStorage.setItem('usuarioId', res.userId.toString());
-
-        // 4) pido la imagen y recién ahí navego
-        this.usuarioService.obtenerImagen(res.userId).subscribe({
-          next: (blob) => {
-            const objectURL = URL.createObjectURL(blob);
-            localStorage.setItem('imagenUsuario', objectURL);
-          },
-          error: () => {
-            localStorage.removeItem('imagenUsuario');
-          },
-          complete: () => {
-            this.router.navigate(['/']);
-          }
-        });
-      },
-      error: (err) => {
-        this.error = err?.error?.message || 'Error en login';
-      }
-    });
-  } */
+  
 
     onSubmit() {
   this.error = null;
@@ -108,24 +60,20 @@ export class LoginArtProdComponent implements OnInit, AfterViewInit {
 
   this.authService.login(this.model).subscribe({
     next: (res) => {
-      // 1. guardo token e id
       this.authService.saveToken(res.token);
       localStorage.setItem('usuarioId', res.userId.toString());
 
-      // 2. VALIDAR rol del token vs rol elegido
       const ok = this.authService.validateSelectedRole(this.model.rol);
       console.log('rol coincide?', ok);
 
       if (!ok) {
-        // si NO coincide, corto todo acá
         this.authService.clearToken();
         localStorage.removeItem('usuarioId');
         this.error =
           'El rol seleccionado no coincide con el rol asignado al usuario.';
-        return; // 👈 este return es clave
+        return; 
       }
 
-      // 3. SOLO si coincide, pido la imagen y navego
       this.usuarioService.obtenerImagen(res.userId).subscribe({
         next: (blob) => {
           const objectURL = URL.createObjectURL(blob);
@@ -167,3 +115,4 @@ export class LoginArtProdComponent implements OnInit, AfterViewInit {
     });
   }
 }
+

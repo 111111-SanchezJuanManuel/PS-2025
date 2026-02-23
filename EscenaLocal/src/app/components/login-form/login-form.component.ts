@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
@@ -43,7 +43,7 @@ export class LoginFormComponent {
       username: this.model.username,
       password: this.model.password,
       email: this.model.email!,
-      imagen: this.selectedFile || undefined // 👈 incluimos la imagen directamente
+      imagen: this.selectedFile || undefined 
 
     };
 
@@ -75,3 +75,4 @@ export class LoginFormComponent {
     this.router.navigate(['/login']);
   }
 }
+

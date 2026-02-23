@@ -1,4 +1,4 @@
-package org.example.escenalocal.services.impl;
+﻿package org.example.escenalocal.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.escenalocal.auth.service.AuthContextService;
@@ -41,8 +41,6 @@ public class NotificacionServiceImpl implements NotificacionService {
       notificacionRepository.save(n);
     });
   }
-
-  //---//
 
   @Transactional(readOnly = true)
   public NotificacionBadgeDto badge() {
@@ -91,7 +89,6 @@ public class NotificacionServiceImpl implements NotificacionService {
       .build();
   }
 
-  //--//
   public void createCambioContrasenaNotificacion(Long userId) {
     Notificacion n = new Notificacion();
     n.setUserId(userId);
@@ -140,3 +137,4 @@ public class NotificacionServiceImpl implements NotificacionService {
   }
 
 }
+

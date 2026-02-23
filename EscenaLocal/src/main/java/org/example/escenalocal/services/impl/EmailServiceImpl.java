@@ -1,4 +1,4 @@
-package org.example.escenalocal.services.impl;
+﻿package org.example.escenalocal.services.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -67,8 +67,9 @@ public class EmailServiceImpl implements EmailService {
 
     helper.setTo(to);
     helper.setSubject("Recuperación de contraseña - EscenaLocal");
-    helper.setText(html, true); // true = HTML
+    helper.setText(html, true); 
 
     mailSender.send(message);
   }
 }
+

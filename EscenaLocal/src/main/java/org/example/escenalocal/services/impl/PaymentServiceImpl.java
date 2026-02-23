@@ -1,4 +1,4 @@
-package org.example.escenalocal.services.impl;
+﻿package org.example.escenalocal.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.escenalocal.dtos.post.PostPaymentInfoDto;
@@ -20,7 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PaymentServiceImpl {
 
-  // mejor por interfaz, pero te dejo como lo tenés
   private final MercadopagoService mercadopagoService;
   private final VentaEntradaRepository ventaRepo;
   private final UserRepository usuarioRepo;
@@ -30,26 +29,22 @@ public class PaymentServiceImpl {
   @Transactional
   public void processPayment(Long paymentId) throws Exception {
 
-    // 0️⃣ Protegernos de paymentId null
     if (paymentId == null) {
       System.out.println("⚠ Webhook sin paymentId, no se puede procesar venta");
       return;
     }
 
-    // 1️⃣ Evitar procesar dos veces el mismo pago de MP
     if (ventaRepo.existsByPaymentId(paymentId)) {
       System.out.println("⚠ Venta ya registrada para paymentId=" + paymentId + ", ignorando webhook");
       return;
     }
 
-    // 2️⃣ Traer info desde Mercado Pago
     PostPaymentInfoDto info = mercadopagoService.getPaymentInfo(paymentId);
 
-    // 🔁 Retry por timing de MP
     int intentos = 0;
     while ((info == null || info.getStatus() == null) && intentos < 3) {
       try {
-        Thread.sleep(2000); // 2 segundos
+        Thread.sleep(2000); 
       } catch (InterruptedException ignored) {}
 
       info = mercadopagoService.getPaymentInfo(paymentId);
@@ -66,7 +61,6 @@ public class PaymentServiceImpl {
       return;
     }
 
-    // 3️⃣ Validación de metadata
     if (
       info.getUsuarioId() == null ||
         info.getEventoId() == null ||
@@ -79,26 +73,8 @@ public class PaymentServiceImpl {
       return;
     }
 
-    // (Opcional) si igual querés evitar que el mismo usuario
-    // compre EXACTAMENTE la misma combinación (evento+tipo) más de una vez:
-        /*
-        boolean yaExisteMismaComb =
-                ventaRepo.existsByUsuario_IdAndTipoEntradaEvento_Id_EventoIdAndTipoEntradaEvento_Id_TiposEntradaId(
-                        info.getUsuarioId(),
-                        info.getEventoId(),
-                        info.getTipoEntradaId()
-                );
+        
 
-        if (yaExisteMismaComb) {
-            System.out.println("⚠ El usuario ya tiene una compra para ese evento y tipo de entrada. " +
-                               "usuarioId=" + info.getUsuarioId() +
-                               ", eventoId=" + info.getEventoId() +
-                               ", tipoEntradaId=" + info.getTipoEntradaId());
-            // si NO querés bloquear eso, simplemente eliminá este bloque
-        }
-        */
-
-    // 4️⃣ Construir la venta
     VentaEntradaEntity venta = new VentaEntradaEntity();
 
     venta.setUsuario(
@@ -116,13 +92,12 @@ public class PaymentServiceImpl {
     venta.setCantidad(info.getCantidad());
     venta.setPrecioUnitario(info.getPrecio());
 
-    // 🔥 Campos nuevos de Mercado Pago en la entidad
-    venta.setPaymentId(paymentId);                    // o info.getPaymentId() si lo trae
-    venta.setEstadoPago(info.getStatus());            // "approved"
-    venta.setExternalReference(info.getExternalReference()); // EVT-17, etc. (agregalo al DTO)
+    venta.setPaymentId(paymentId);                    
+    venta.setEstadoPago(info.getStatus());            
+    venta.setExternalReference(info.getExternalReference()); 
     venta.setFechaActualizacion(LocalDateTime.now());
     venta.setQrToken(UUID.randomUUID().toString());
-    venta.setStatusDetail(info.getStatusDetail());    // agregalo al DTO si te interesa
+    venta.setStatusDetail(info.getStatusDetail());    
 
     ventaRepo.save(venta);
 
@@ -130,17 +105,15 @@ public class PaymentServiceImpl {
 
     Long compradorId = venta.getUsuario().getId();
     Long productorId = tipoEntrada.getEvento().getProductor().getUsuario().getId();
-    String nombreEvento = tipoEntrada.getEvento().getEvento(); // o getNombre()
+    String nombreEvento = tipoEntrada.getEvento().getEvento(); 
     Integer cantidad = venta.getCantidad();
 
-// Notificación al comprador
     notificacionService.createCompraEntradaNotificacion(
       compradorId,
       cantidad,
       nombreEvento
     );
 
-// Notificación al productor (evitar duplicado si fuera el mismo user)
     if (!productorId.equals(compradorId)) {
       notificacionService.createVentaEntradaNotificacion(
         productorId,
@@ -150,3 +123,4 @@ public class PaymentServiceImpl {
     }
   }
 }
+

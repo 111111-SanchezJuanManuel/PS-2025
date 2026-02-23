@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -57,7 +57,6 @@ export interface GeneroMusical {
 export class EventService {
   private apiUrl = 'http://localhost:8080';
 
-  // Sistema de filtros
   private filtrosSubject = new BehaviorSubject<FiltrosEvento>({
     busqueda: '',
     provincia: '',
@@ -70,7 +69,6 @@ export class EventService {
 
   constructor(private http: HttpClient) {}
 
-  // ========== TUS MÉTODOS ORIGINALES ==========
   getEvents(): Observable<EventGet[]> {
     return this.http.get<EventGet[]>(this.apiUrl + "/eventos/all");
   }
@@ -124,19 +122,15 @@ export class EventService {
     });
   }
 
-  // ========== NUEVOS MÉTODOS PARA FILTROS ==========
   
-  // Método para actualizar los filtros desde el searchbox
   actualizarFiltros(filtros: FiltrosEvento): void {
     this.filtrosSubject.next(filtros);
   }
 
-  // Método para obtener filtros actuales (IMPORTANTE para evitar el error)
   getFiltrosActuales(): FiltrosEvento {
     return this.filtrosSubject.value;
   }
 
-  // Método para filtrar eventos localmente (en el navegador)
   filtrarEventosLocalmente(eventos: EventGet[], filtros: FiltrosEvento): EventGet[] {
     if (!eventos || eventos.length === 0) {
       return [];
@@ -144,14 +138,12 @@ export class EventService {
 
     let resultados = eventos;
 
-    // Filtrar por provincia
     if (filtros.provincia && filtros.provincia.trim() !== '') {
       resultados = resultados.filter(evento => 
         String(evento.provincia) === filtros.provincia
       );
     }
 
-    // Filtrar por búsqueda de texto
     if (filtros.busqueda && filtros.busqueda.trim() !== '') {
       const busquedaLower = filtros.busqueda.toLowerCase();
       resultados = resultados.filter(evento => {
@@ -172,7 +164,6 @@ export class EventService {
     return resultados;
   }
 
-  // Método alternativo: obtener eventos filtrados desde el backend
   getEventosFiltrados(filtros: FiltrosEvento): Observable<EventGet[]> {
     this.cargandoSubject.next(true);
     
@@ -200,9 +191,7 @@ export class EventService {
     });
   }
 
-  /**
-   * Actualiza un evento existente
-   */
+  
   actualizarEvento(id: number, formData: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/eventos/editar/${id}`, formData);
   }

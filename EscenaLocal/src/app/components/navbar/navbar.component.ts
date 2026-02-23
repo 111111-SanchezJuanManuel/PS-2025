@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EventSearchComponent } from '../event-search/event-search.component';
@@ -16,7 +16,7 @@ import { NotificationBellComponent } from '../notification-bell/notification-bel
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  imagenUrl: string = 'assets/img/usuario.png'; // imagen por defecto
+  imagenUrl: string = 'assets/img/usuario.png'; 
   private subs: Subscription[] = [];
   private objectUrlToRevoke: string | null = null;
   unreadCount: number = 0;
@@ -30,10 +30,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // cargar imagen si ya hay usuario logueado
     this.cargarImagenUsuario();
 
-    // escuchar cambios en el avatar desde AuthService (reactivo)
     this.subs.push(
       this.authService.avatarState$.subscribe((url) => {
         if (url) {
@@ -44,7 +42,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       })
     );
 
-    // escuchar cambios de login/logout
     this.subs.push(
       this.authService.loginState$.subscribe((logged) => {
         if (logged) {
@@ -57,7 +54,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     const usuarioId = Number(localStorage.getItem('usuarioId'));
 
-    // Cargar imagen de usuario
     if (usuarioId) {
       this.usuarioService.obtenerImagen(usuarioId).subscribe({
         next: (blob) => {
@@ -69,11 +65,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         },
       });
 
-      // Cargar notificaciones desde el backend
       this.notificacionService.obtenerNotificaciones(usuarioId).subscribe({
         next: (data) => {
           this.notificaciones = data;
-          // contar las no leídas
           this.unreadCount = this.notificaciones.filter(n => !n.leido).length;
           console.log('Notificaciones cargadas:', this.notificaciones);
         },
@@ -95,7 +89,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.imagenUrl = objectURL;
         this.objectUrlToRevoke = objectURL;
 
-        // También actualizamos el avatar en el AuthService para compartirlo con otros componentes
         this.authService.setAvatar(objectURL);
       },
       error: () => {
@@ -105,17 +98,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
 
-  // Verifica si hay token guardado
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
 
-  // Redirige al login
   irAlLogin(): void {
     this.router.navigate(['/login']);
   }
 
-  // Cierra sesión
   cerrarSesion(): void {
     this.authService.logout();
     this.imagenUrl = 'assets/img/usuario.png';
@@ -124,23 +114,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.unreadCount = 0;
   }
 
-  // Maneja la apertura de una notificación
   abrirNotificacion(n: Notificacion) {
     console.log('Notificación abierta:', n.mensaje);
 
-    // Si la notificación no estaba leída
     if (!n.leido) {
       n.leido = true;
       this.unreadCount = this.notificaciones.filter(notif => !notif.leido).length;
 
-      // Actualizar en el backend
       this.notificacionService.marcarComoLeido(n.id).subscribe({
         next: () => {
           console.log(`Notificación ${n.id} marcada como leída en el backend`);
         },
         error: (err) => {
           console.error('Error al marcar como leído:', err);
-          // Si falla, revertir el cambio local
           n.leido = false;
           this.unreadCount = this.notificaciones.filter(notif => !notif.leido).length;
         },
@@ -159,3 +145,4 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subs.forEach((s) => s.unsubscribe());
   }
 }
+

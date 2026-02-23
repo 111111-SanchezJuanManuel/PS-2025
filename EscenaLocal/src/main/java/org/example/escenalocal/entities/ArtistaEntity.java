@@ -1,4 +1,4 @@
-package org.example.escenalocal.entities;
+﻿package org.example.escenalocal.entities;
 
 
 import jakarta.persistence.*;
@@ -48,16 +48,14 @@ public class ArtistaEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        // importante para proxies
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         ArtistaEntity that = (ArtistaEntity) o;
-        // si id es null, NO son iguales
         return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        // recomendado por Hibernate: clase, no colecciones ni campos mutables
         return getClass().hashCode();
     }
 }
+

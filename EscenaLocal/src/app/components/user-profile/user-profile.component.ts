@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
@@ -38,14 +38,12 @@ export class UserProfileComponent implements OnInit {
       next: (u) => {
         this.usuario = u;
 
-        // 🔹 Cargar IDs desde el DTO
         this.idArtista = u.idArtista ?? null;
         this.idProductor = u.idProductor ?? null;
         if (u.rol === 'ROL_PRODUCTOR' && this.idProductor) {
           this.authService.setProductorId(this.idProductor);
         }
 
-        // 🔹 Cargar imagen si tu backend lo expone así
         this.imagenUrl = `http://localhost:8080/auth/${u.id}/imagen`;
 
         
@@ -82,7 +80,6 @@ export class UserProfileComponent implements OnInit {
   if (!this.usuario) return;
 
   if (this.esProductor() && this.idProductor) {
-    // ✅ Guardar SIEMPRE antes de navegar
     this.authService.setProductorId(this.idProductor);
 
     this.router.navigate([`/eventos/productor/${this.idProductor}`]);
@@ -118,3 +115,4 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/perfil/notificaciones']);
   }
 }
+

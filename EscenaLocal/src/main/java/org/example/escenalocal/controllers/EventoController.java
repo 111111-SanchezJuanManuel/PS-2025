@@ -1,4 +1,4 @@
-package org.example.escenalocal.controllers;
+﻿package org.example.escenalocal.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +50,6 @@ public class EventoController {
       mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
       schema = @Schema(implementation = CreateEventoMultipart.class),
       encoding = {
-        // <- fuerza a Swagger a enviar dto como application/json
         @Encoding(name = "dto", contentType = MediaType.APPLICATION_JSON_VALUE),
         @Encoding(name = "file", contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE)
       }
@@ -129,10 +128,8 @@ public class EventoController {
 
     var updated = eventoService.updateEvento(id, dto);
 
-    // si también viene imagen, la actualiza aparte
     if (imagen != null && !imagen.isEmpty()) {
       eventoService.actualizarImagen(id, imagen);
-      // recargar datos actualizados con imagen incluida
       updated = eventoService.getEventoById(id);
     }
 
@@ -161,3 +158,4 @@ public class EventoController {
   }
 
 }
+

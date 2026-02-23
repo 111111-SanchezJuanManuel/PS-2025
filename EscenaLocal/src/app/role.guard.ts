@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   Router
 } from '@angular/router';
-import { AuthService } from './services/auth.service'; // ajustá la ruta
+import { AuthService } from './services/auth.service'; 
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
@@ -13,15 +13,13 @@ export class RoleGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const expectedRole = route.data['role'] as string;
-    const tokenRole = this.auth.getRoleFromToken(); // ya lo tenés en tu service
+    const tokenRole = this.auth.getRoleFromToken(); 
 
-    // si no hay token o no hay rol → afuera
     if (!tokenRole) {
       this.router.navigate(['/login']);
       return false;
     }
 
-    // si no coincide → forbidden
     if (expectedRole && tokenRole !== expectedRole) {
       this.router.navigate(['/forbidden']);
       return false;
@@ -30,3 +28,4 @@ export class RoleGuard implements CanActivate {
     return true;
   }
 }
+

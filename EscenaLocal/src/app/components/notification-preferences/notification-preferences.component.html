@@ -1,4 +1,4 @@
-<div class="page" *ngIf="preferences; else loadingTpl">
+﻿<div class="page" *ngIf="preferences; else loadingTpl">
   <div class="card">
 
     <div class="header">
@@ -10,9 +10,7 @@
       </div>
     </div>
 
-    <!-- =====================
-         CANALES
-    ====================== -->
+    
     <div class="section">
       <h3 class="section-title">Canales</h3>
       <p class="section-hint">Cómo querés recibir las notificaciones.</p>
@@ -46,9 +44,7 @@
       </div>
     </div>
 
-    <!-- =====================
-         GENERALES (TODOS)
-    ====================== -->
+    
     <div class="section">
       <h3 class="section-title">Generales</h3>
       <p class="section-hint">Estas aplican a todos los roles.</p>
@@ -82,9 +78,7 @@
       </div>
     </div>
 
-    <!-- =====================
-         USUARIO
-    ====================== -->
+    
     <div class="section" *ngIf="role === 'ROL_USUARIO'">
       <h3 class="section-title">Usuario</h3>
       <p class="section-hint">Preferencias específicas para usuarios.</p>
@@ -106,9 +100,7 @@
       </div>
     </div>
 
-    <!-- =====================
-         ARTISTA
-    ====================== -->
+    
     <div class="section" *ngIf="role === 'ROL_ARTISTA'">
       <h3 class="section-title">Artista</h3>
       <p class="section-hint">Preferencias específicas para artistas.</p>
@@ -154,9 +146,7 @@
       </div>
     </div>
 
-    <!-- =====================
-         PRODUCTOR
-    ====================== -->
+    
     <div class="section" *ngIf="role === 'ROL_PRODUCTOR'">
       <h3 class="section-title">Productor</h3>
       <p class="section-hint">Preferencias específicas para productores.</p>
@@ -202,9 +192,7 @@
       </div>
     </div>
 
-    <!-- =====================
-         ACCIONES
-    ====================== -->
+    
     <div class="actions">
       <button class="btn primary" (click)="save()" [disabled]="saving">
         {{ saving ? 'Guardando...' : 'Guardar cambios' }}
@@ -229,3 +217,4 @@
     </div>
   </div>
 </ng-template>
+

@@ -1,4 +1,4 @@
-package org.example.escenalocal.entities;
+﻿package org.example.escenalocal.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,7 +19,6 @@ public class NotificacionPreferenciaEntity {
   @Column(name = "user_id", nullable = false, unique = true)
   private Long userId;
 
-  // canales
   @Builder.Default
   @Column(nullable = false)
   private boolean email = true;
@@ -28,7 +27,6 @@ public class NotificacionPreferenciaEntity {
   @Column(nullable = false)
   private boolean push = false;
 
-  // tipos
   @Builder.Default
   @Column(name = "marketing_novedades", nullable = false)
   private boolean marketingNovedades = false;
@@ -41,7 +39,6 @@ public class NotificacionPreferenciaEntity {
   @Column(name = "mensajes_directos", nullable = false)
   private boolean mensajesDirectos = true;
 
-  // artista
   @Builder.Default
   @Column(name = "invitaciones_a_eventos", nullable = false)
   private boolean invitacionesAEventos = true;
@@ -50,7 +47,6 @@ public class NotificacionPreferenciaEntity {
   @Column(name = "nuevos_seguidores", nullable = false)
   private boolean nuevosSeguidores = true;
 
-  // productor
   @Builder.Default
   @Column(name = "ventas_entradas", nullable = false)
   private boolean ventasEntradas = true;
@@ -73,3 +69,4 @@ public class NotificacionPreferenciaEntity {
     updatedAt = LocalDateTime.now();
   }
 }
+

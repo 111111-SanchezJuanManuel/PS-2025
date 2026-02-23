@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventService, EventGet, FiltrosEvento } from '../../services/event.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -20,15 +20,13 @@ export class EventListComponent implements OnInit, OnDestroy {
   isLogged = false;
   isProductor = false;
 
-  /** ✅ id del productor logueado (para validar propiedad) */
+  
   productorIdLogueado: number | null = null;
   
 
-  // control de filtros
   hayFiltrosActivos = false;
   filtroActual: FiltrosEvento = { busqueda: '', provincia: '', genero: '' };
 
-  // para saber si estamos viendo eventos de un productor o de un artista
   vistaPorProductor = false;
   vistaPorArtista = false;
   idPersona!: number;
@@ -46,22 +44,17 @@ export class EventListComponent implements OnInit, OnDestroy {
     console.log("TOKEN " + this.authService.getToken());
     this.isLogged = this.authService.isLoggedIn();
 
-// ✅ tu token trae "ROL_PRODUCTOR", así que esto tiene que matchear eso
 this.isProductor = this.authService.tieneRol('ROL_PRODUCTOR');
 
-// ✅ traer el productorId guardado desde el perfil
 this.productorIdLogueado = this.authService.getProductorId();
 
-// 🔥 logs para debug
 console.log('isLogged:', this.isLogged);
 console.log('isProductor:', this.isProductor);
 console.log('productorIdLogueado (localStorage):', this.productorIdLogueado);
 
-    // ✅ detectar rol + productorId
     this.isProductor = this.authService.tieneRol('PRODUCTOR');
 this.productorIdLogueado = this.authService.getProductorIdFromToken();
 
-    // 1) vemos qué ruta es
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       const path = this.route.snapshot.routeConfig?.path || '';
@@ -82,7 +75,6 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
       }
     });
 
-    // 2) escuchamos cambios de filtros
     this.eventService.filtros$
       .pipe(takeUntil(this.destroy$))
       .subscribe(filtros => {
@@ -105,11 +97,7 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
     this.destroy$.complete();
   }
 
-  // ======================
-  // ✅ PERMISOS EDICIÓN
-  // ======================
-
-  /** Devuelve true si el productor logueado es dueño del evento */
+  
  puedeEditarEvento(e: EventGet): boolean {
   const productorId = this.authService.getProductorId();
   const rol = this.authService.getUserRoleFromToken() || this.authService.getRoleFromToken();
@@ -130,18 +118,15 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
   this.router.navigate(['/eventos/editar', id]);
 }
 
-  /** Ajustá estas 2 funciones a tu AuthService real */
+  
   private detectarSiEsProductor(): boolean {
-    // Opción A: si ya tenés método
     if ((this.authService as any).isProductor) return (this.authService as any).isProductor();
 
-    // Opción B: si tenés getRole()
     if ((this.authService as any).getRole) {
       const role = (this.authService as any).getRole();
       return String(role || '').toUpperCase().includes('PRODUCTOR');
     }
 
-    // Opción C: fallback desde JWT (role/roles)
     const token = (this.authService as any).getToken?.() || localStorage.getItem('token');
     const payload = this.decodeJwtPayload(token);
     const roles = payload?.roles ?? payload?.role ?? payload?.authorities ?? [];
@@ -150,10 +135,8 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
   }
 
   private obtenerProductorIdLogueado(): number | null {
-    // Opción A: si ya lo tenés directo
     if ((this.authService as any).getProductorId) return Number((this.authService as any).getProductorId());
 
-    // Opción B: desde JWT claim (ej: productorId)
     const token = (this.authService as any).getToken?.() || localStorage.getItem('token');
     const payload = this.decodeJwtPayload(token);
 
@@ -182,10 +165,6 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
       return null;
     }
   }
-
-  // ======================
-  // CARGAS
-  // ======================
 
   cargarEventos(): void {
     this.eventService.getEvents().subscribe({
@@ -242,10 +221,6 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
     });
   }
 
-  // ======================
-  // FILTROS (sin cambios)
-  // ======================
-
   private filtrarEventos(busqueda: string, provincia: string, genero?: string): void {
     if (!this.todosLosEventos || this.todosLosEventos.length === 0) {
       this.events = [];
@@ -286,11 +261,10 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
     this.events = resultado;
   }
 
-  // Helpers (sin cambios)
-  private extraerFechaDesdeBusqueda(input: string): string | null { /* ...tu código... */ return null; }
-  private eventoEsDeFecha(e: EventGet, ymd: string): boolean { /* ...tu código... */ return false; }
-  private formatYMD(d: Date): string { /* ...tu código... */ return ''; }
-  private esFechaValida(y: number, m: number, d: number): boolean { /* ...tu código... */ return true; }
+  private extraerFechaDesdeBusqueda(input: string): string | null {  return null; }
+  private eventoEsDeFecha(e: EventGet, ymd: string): boolean {  return false; }
+  private formatYMD(d: Date): string {  return ''; }
+  private esFechaValida(y: number, m: number, d: number): boolean {  return true; }
 
   limpiarFiltros(): void {
     this.eventService.actualizarFiltros({ busqueda: '', provincia: '', genero: '' });
@@ -300,3 +274,4 @@ this.productorIdLogueado = this.authService.getProductorIdFromToken();
     this.router.navigate(['/evento', id]);
   }
 }
+

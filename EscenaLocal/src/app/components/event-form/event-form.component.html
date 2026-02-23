@@ -1,4 +1,4 @@
-<div class="container mt-5">
+﻿<div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card shadow">
@@ -7,7 +7,7 @@
         </div>
         <div class="card-body">
           <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-            <!-- Nombre del Evento -->
+            
             <div class="mb-3">
               <label for="nombreEvento" class="form-label"
                 >Nombre del Evento</label
@@ -33,7 +33,7 @@
               </div>
             </div>
 
-            <!-- Descripción -->
+            
             <div class="mb-3">
               <label for="descripcion" class="form-label">Descripción</label>
               <textarea
@@ -63,11 +63,11 @@
               </small>
             </div>
 
-            <!-- Artistas (Múltiples) -->
+            
             <div class="mb-3">
               <label class="form-label">Artistas</label>
 
-              <!-- Selector de Artista -->
+              
               <div class="input-group">
                 <select
                   class="form-select"
@@ -93,7 +93,7 @@
                 </button>
               </div>
 
-              <!-- Lista de Artistas Seleccionados -->
+              
               <div class="mt-3" *ngIf="artistasSeleccionados.length > 0">
                 <label class="form-label fw-bold">Artistas agregados:</label>
                 <div class="list-group">
@@ -116,7 +116,7 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación -->
+              
               <div
                 class="text-danger small mt-2"
                 *ngIf="submitted && artistasSeleccionados.length === 0"
@@ -124,7 +124,7 @@
                 Debe agregar al menos un artista
               </div>
 
-              <!-- Spinner de carga -->
+              
               <div
                 class="text-center mt-2"
                 *ngIf="isLoading && artistas.length === 0"
@@ -150,11 +150,11 @@
   </small>
 </div>
 
-            <!-- Tipo de Entrada (Múltiples con precio y disponibilidad) -->
+            
             <div class="mb-3">
               <label class="form-label">Tipos de Entrada</label>
 
-              <!-- Selector de Tipo de Entrada con Precio y Disponibilidad -->
+              
               <div class="card bg-light p-3">
                 <div class="row g-3">
                   <div class="col-md-6">
@@ -213,7 +213,7 @@
                 </button>
               </div>
 
-              <!-- Lista de Tipos de Entrada Seleccionados -->
+              
               <div class="mt-3" *ngIf="tiposEntradaSeleccionados.length > 0">
                 <label class="form-label fw-bold">Entradas configuradas:</label>
                 <div class="list-group">
@@ -258,7 +258,7 @@
                 </div>
               </div>
 
-              <!-- Mensaje de validación -->
+              
               <div
                 class="text-danger small mt-2"
                 *ngIf="submitted && tiposEntradaSeleccionados.length === 0"
@@ -267,7 +267,7 @@
               </div>
             </div>
 
-            <!-- Establecimiento -->
+            
             <div class="mb-3">
               <label for="establecimientoId" class="form-label"
                 >Establecimiento</label
@@ -294,7 +294,7 @@
               </div>
             </div>
 
-            <!-- Clasificación -->
+            
             <div class="mb-3">
               <label for="clasificacionId" class="form-label"
                 >Clasificación</label
@@ -321,7 +321,7 @@
               </div>
             </div>
 
-            <!-- Fecha -->
+            
             <div class="mb-3">
               <label for="fecha" class="form-label">Fecha del Evento</label>
               <input
@@ -339,7 +339,7 @@
               </div>
             </div>
 
-            <!-- Hora -->
+            
             <div class="mb-3">
               <label for="hora" class="form-label">Hora del Evento</label>
               <input
@@ -357,7 +357,7 @@
               </div>
             </div>
 
-            <!-- Imagen -->
+            
             <div class="mb-3">
               <label for="imagen" class="form-label">Imagen del Evento</label>
               <input
@@ -375,7 +375,7 @@
                 Debe seleccionar una imagen
               </div>
 
-              <!-- Preview de la imagen -->
+              
               <div class="mt-3" *ngIf="imagePreview">
                 <div class="position-relative d-inline-block">
                   <img
@@ -401,7 +401,7 @@
               </div>
             </div>
 
-            <!-- Estado Activo/Inactivo -->
+            
             <div class="mb-3">
               <div class="form-check form-switch">
                 <input
@@ -427,7 +427,7 @@
               </small>
             </div>
 
-            <!-- Botones -->
+            
             <div class="d-grid gap-2 d-md-flex justify-content-md-between">
               <button
                 type="button"
@@ -460,3 +460,4 @@
     </div>
   </div>
 </div>
+

@@ -1,4 +1,4 @@
-package org.example.escenalocal.entities;
+﻿package org.example.escenalocal.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,28 +25,20 @@ public class TiposEntradaEntity {
     @Column
     private String entrada;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "evento_entrada",
-//            joinColumns = @JoinColumn(name = "idEvento"),
-//            inverseJoinColumns = @JoinColumn(name = "idTiposEntrada"))
-//    @ManyToMany(mappedBy = "tiposEntrada")
     @OneToMany(mappedBy = "tiposEntrada")
     private Set<EventoTiposEntradaEntity> eventoTipos = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        // importante para proxies
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         TiposEntradaEntity that = (TiposEntradaEntity) o;
-        // si id es null, NO son iguales
         return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        // recomendado por Hibernate: clase, no colecciones ni campos mutables
         return getClass().hashCode();
     }
 }
+

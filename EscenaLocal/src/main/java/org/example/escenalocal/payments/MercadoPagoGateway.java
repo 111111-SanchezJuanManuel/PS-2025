@@ -1,4 +1,4 @@
-package org.example.escenalocal.payments;
+﻿package org.example.escenalocal.payments;
 
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.preference.*;
@@ -21,9 +21,6 @@ public class MercadoPagoGateway implements PaymentGateway {
   @Value("${mercadopago.enable-webhook:true}")
   private boolean enableWebhook;
 
-  // ======================================================
-  // CREATE PREFERENCE
-  // ======================================================
   @Override
   public CreatePrefResult createPreferenceWithBase(
     CreatePrefCommand cmd,
@@ -70,12 +67,10 @@ public class MercadoPagoGateway implements PaymentGateway {
         "precio", cmd.items().get(0).unitPrice()
       ));
 
-    // Auto return solo HTTPS
     if (b.startsWith("https://")) {
       builder.autoReturn("approved");
     }
 
-    // Webhook solo HTTPS
     if (enableWebhook && b.startsWith("https://")) {
       builder.notificationUrl(b + "/payments/webhook");
     }
@@ -93,9 +88,6 @@ public class MercadoPagoGateway implements PaymentGateway {
     return new CreatePrefResult(pref.getId(), pref.getInitPoint());
   }
 
-  // ======================================================
-  // PAYMENT STATUS
-  // ======================================================
   @Override
   public PaymentStatus getStatus(String id) {
     try {
@@ -110,9 +102,6 @@ public class MercadoPagoGateway implements PaymentGateway {
     }
   }
 
-  // ======================================================
-  // BASE NORMALIZER
-  // ======================================================
   private String normalizeBase(String base) {
     String b = (base == null || base.isBlank())
       ? baseUrl
@@ -122,7 +111,6 @@ public class MercadoPagoGateway implements PaymentGateway {
       b = b.substring(0, b.length() - 1);
     }
 
-    // ngrok siempre HTTPS
     if (b.startsWith("http://") && b.contains("ngrok")) {
       b = "https://" + b.substring(7);
     }
@@ -130,6 +118,7 @@ public class MercadoPagoGateway implements PaymentGateway {
     return b;
   }
 }
+
 
 
 

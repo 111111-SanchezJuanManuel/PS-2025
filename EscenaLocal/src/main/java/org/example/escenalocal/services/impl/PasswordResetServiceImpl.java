@@ -1,4 +1,4 @@
-package org.example.escenalocal.services.impl;
+﻿package org.example.escenalocal.services.impl;
 
 import jakarta.mail.MessagingException;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     if (optUser.isEmpty()) return;
 
     UsuarioEntity user = optUser.get();
-    String token = UUID.randomUUID().toString(); // ejemplo: 36 chars
+    String token = UUID.randomUUID().toString(); 
 
     PasswordResetTokenEntity tokenEntity = new PasswordResetTokenEntity();
     tokenEntity.setToken(token);
@@ -69,3 +69,4 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     tokenRepo.save(tokenEntity);
   }
 }
+

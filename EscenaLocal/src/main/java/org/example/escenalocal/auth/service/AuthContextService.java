@@ -1,4 +1,4 @@
-package org.example.escenalocal.auth.service;
+﻿package org.example.escenalocal.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.escenalocal.auth.repository.UserRepository;
@@ -18,10 +18,11 @@ public class AuthContextService {
       throw new IllegalStateException("Usuario no autenticado");
     }
 
-    String username = auth.getName(); // JuanMS
+    String username = auth.getName(); 
 
     return usuarioRepository.findByUsername(username)
       .orElseThrow(() -> new IllegalStateException("Usuario no encontrado: " + username))
       .getId();
   }
 }
+

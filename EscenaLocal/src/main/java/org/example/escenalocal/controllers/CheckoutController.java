@@ -1,4 +1,4 @@
-  package org.example.escenalocal.controllers;
+﻿  package org.example.escenalocal.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ public class CheckoutController {
   @GetMapping("/success")
   public void success(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    String query = request.getQueryString(); // payment_id=...&status=...
+    String query = request.getQueryString(); 
 
     response.sendRedirect("http://localhost:4200/checkout/success?" + query);
   }
@@ -29,4 +29,5 @@ public class CheckoutController {
     response.sendRedirect("http://localhost:4200/checkout/pending");
   }
 }
+
 

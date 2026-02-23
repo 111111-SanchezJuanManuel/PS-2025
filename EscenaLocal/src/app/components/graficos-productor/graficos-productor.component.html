@@ -1,4 +1,4 @@
-<div class="graficos-wrapper">
+﻿<div class="graficos-wrapper">
 
   <h2>Gráficos del productor</h2>
 
@@ -7,9 +7,7 @@
 
   <ng-container *ngIf="!loading && !error">
 
-    <!-- =======================
-         1) BARRAS: Recaudación por día
-         ======================= -->
+    
     <section class="grafico-bloque" *ngIf="ventasPorDiaChart.length > 0">
       <h3>Recaudación por día</h3>
 
@@ -29,9 +27,7 @@
       </ngx-charts-bar-vertical>
     </section>
 
-    <!-- =======================
-         2) TORTA: Entradas por tipo
-         ======================= -->
+    
     <section class="grafico-bloque" *ngIf="entradasPorTipoChart.length > 0">
       <h3>Entradas vendidas por tipo</h3>
 
@@ -46,9 +42,7 @@
       </ngx-charts-pie-chart>
     </section>
 
-    <!-- =======================
-         3) BARRAS HORIZONTALES: Recaudación por evento
-         ======================= -->
+    
     <section class="grafico-bloque" *ngIf="recaudacionEventosChart.length > 0">
       <h3>Recaudación por evento</h3>
 
@@ -66,7 +60,7 @@
       </ngx-charts-bar-horizontal>
     </section>
 
-    <!-- Si querés un botón para volver al dashboard -->
+    
     <div class="acciones">
       <a [routerLink]="['/dashboard/productor']"
          [queryParams]="{ productorId: productorId, from: from, to: to }">
@@ -76,3 +70,4 @@
 
   </ng-container>
 </div>
+

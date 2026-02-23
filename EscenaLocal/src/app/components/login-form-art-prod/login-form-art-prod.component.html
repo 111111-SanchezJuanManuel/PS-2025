@@ -1,7 +1,7 @@
-<div class="container mt-4" style="max-width: 420px">
+﻿<div class="container mt-4" style="max-width: 420px">
   <div class="card p-3 shadow">
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-      <!-- Datos de usuario -->
+      
       <div class="mb-3">
         <label class="form-label">Usuario</label>
         <input
@@ -34,7 +34,7 @@
         />
       </div>
 
-      <!-- Rol -->
+      
       <div class="mb-3">
         <label class="form-label">Rol</label>
         <select
@@ -50,7 +50,7 @@
         </select>
       </div>
 
-      <!-- Campos comunes Artista/Productor -->
+      
       <div class="mb-3">
         <label class="form-label">Nombre</label>
         <input
@@ -88,7 +88,7 @@
         />
       </div>
 
-      <!-- SOLO si es artista, mostrar géneros -->
+      
       <div class="mb-3" *ngIf="esArtista()">
         <label class="form-label">Género musical</label>
         <select
@@ -104,7 +104,7 @@
         </select>
       </div>
 
-      <!-- Imagen opcional -->
+      
       <div class="mb-3" *ngIf="modoRegistro">
         <label class="form-label">Foto de perfil (opcional)</label>
         <input
@@ -134,3 +134,4 @@
     </div>
   </div>
 </div>
+

@@ -1,5 +1,4 @@
-// auth.interceptor.ts
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
@@ -18,9 +17,8 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = this.authService.getToken(); // de localStorage, etc.
+    const token = this.authService.getToken(); 
     console.log('➡️ Request a:', req.url, ' token:', token);
-    // NO agregamos token a login/register, pero sí al resto
     if (token &&
         !req.url.includes('/auth/login') &&
         !req.url.includes('/auth/register')) {
@@ -37,3 +35,4 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req);
   }
 }
+

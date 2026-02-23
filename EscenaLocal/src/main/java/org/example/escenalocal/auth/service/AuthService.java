@@ -1,4 +1,4 @@
-package org.example.escenalocal.auth.service;
+﻿package org.example.escenalocal.auth.service;
 
 import org.example.escenalocal.auth.dtos.*;
 import org.example.escenalocal.auth.repository.RolRepository;
@@ -44,17 +44,13 @@ public class AuthService {
       );
     authManager.authenticate(authToken);
 
-    // 2) buscar usuario REAL en la base
     UsuarioEntity usuario = userRepo.findByUsername(req.getUsername())
       .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    // 3) obtener rol REAL de la base (NO usar el del request)
-    String rolReal = usuario.getRol().getRol(); // p.ej. "ROL_PRODUCTOR"
+    String rolReal = usuario.getRol().getRol(); 
 
-    // 4) generar token con el rol REAL
     String token = jwtUtil.generateToken(usuario.getUsername(), rolReal);
 
-    // 5) devolver respuesta al front
     return new AuthResponse(token, usuario.getId());
   }
 
@@ -80,7 +76,6 @@ public class AuthService {
       guardarImagenUsuario(u.getId(), req.getImagen());
     }
 
-    // Generar token incluyendo el rol real
     String token = jwtUtil.generateToken(u.getUsername(), u.getRol().getRol());
 
     return new AuthResponse(token, u.getId());
@@ -130,24 +125,21 @@ public class AuthService {
 
   public void cambiarPassword(ChangePasswordRequest req, String username) {
 
-    // Buscar usuario por username autenticado
     UsuarioEntity user = userRepo.findByUsername(username)
       .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    // Verificar contraseña actual
     if (!passwordEncoder.matches(req.getActual(), user.getPassword())) {
       throw new RuntimeException("La contraseña actual es incorrecta");
     }
 
-    // Validar nueva contraseña (opcional)
     if (req.getNueva().length() < 6) {
       throw new RuntimeException("La nueva contraseña debe tener al menos 6 caracteres");
     }
 
-    // Actualizar y guardar nueva contraseña
     user.setPassword(passwordEncoder.encode(req.getNueva()));
     userRepo.save(user);
 
     notificacionService.createCambioContrasenaNotificacion(user.getId());
   }
 }
+

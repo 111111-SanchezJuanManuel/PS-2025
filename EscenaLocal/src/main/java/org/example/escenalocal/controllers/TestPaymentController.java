@@ -1,4 +1,4 @@
-package org.example.escenalocal.controllers;
+﻿package org.example.escenalocal.controllers;
 
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.payment.PaymentCreateRequest;
@@ -25,7 +25,6 @@ public class TestPaymentController {
     try {
       BigDecimal total = precio.multiply(BigDecimal.valueOf(cantidad));
 
-      // ⚠ usuario comprador de PRUEBA
       String emailCompradorTest = "test_user_123456@testuser.com";
 
       PaymentClient client = new PaymentClient();
@@ -69,3 +68,4 @@ public class TestPaymentController {
     }
   }
 }
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -22,12 +22,10 @@ export class GraficosProductorComponent implements OnInit {
 
   dashboard: any;
 
-  // Datos para ngx-charts
   ventasPorDiaChart: { name: string; value: number }[] = [];
   entradasPorTipoChart: { name: string; value: number }[] = [];
   recaudacionEventosChart: { name: string; value: number }[] = [];
 
-  // Tamaño base de los gráficos
   view: [number, number] = [700, 300];
 
   constructor(
@@ -71,9 +69,7 @@ export class GraficosProductorComponent implements OnInit {
       });
   }
 
-  /* =========================
-     ARMADO DE DATA PARA GRÁFICOS
-     ========================= */
+  
 
   private buildCharts(): void {
     this.buildVentasPorDiaChart();
@@ -85,7 +81,6 @@ export class GraficosProductorComponent implements OnInit {
     const source = this.dashboard?.ventasPorDia || [];
 
     this.ventasPorDiaChart = source.map((p: any) => ({
-      // p.fecha debería venir como '2026-01-15'
       name: p.fecha,
       value: Number(p.totalDia ?? 0)
     }));
@@ -95,14 +90,12 @@ export class GraficosProductorComponent implements OnInit {
     const source = this.dashboard?.entradasPorTipo || [];
 
     this.entradasPorTipoChart = source.map((t: any) => ({
-      // tipoEntradaNombre, cantidadVendida
       name: t.tipoEntradaNombre,
       value: Number(t.cantidadVendida ?? 0)
     }));
   }
 
   private buildRecaudacionEventosChart(): void {
-    // backend: topEventos: [{ eventoNombre, recaudacion, entradasVendidas }, ...]
     const source = this.dashboard?.topEventos || [];
 
     this.recaudacionEventosChart = source.map((e: any) => ({
@@ -111,13 +104,9 @@ export class GraficosProductorComponent implements OnInit {
     }));
   }
 
-  /* =========================
-     FORMATTERS PARA NGX-CHARTS
-     ========================= */
+  
 
-  // Formato de fecha para eje X (dd/MM)
   formatFechaEjeX = (value: string): string => {
-    // Esperado: 'YYYY-MM-DD'
   if (!value) return '';
 
   const parts = value.split('-');
@@ -126,11 +115,9 @@ export class GraficosProductorComponent implements OnInit {
     return `${dd}/${mm}/${yyyy}`;
   }
 
-  // fallback si viene en otro formato
   return value;
   };
 
-  // Formato moneda ARS para valores numéricos
   formatMoneda = (value: number): string => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -144,3 +131,4 @@ export class GraficosProductorComponent implements OnInit {
     return this.formatMoneda(value);
   };
 }
+

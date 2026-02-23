@@ -1,7 +1,7 @@
-<div class="container my-5">
+﻿<div class="container my-5">
   <h2 class="mb-4">Eventos Destacados</h2>
 
-  <!-- Lista de eventos -->
+  
   <div class="row">
     <div class="col-sm-6 col-md-3" *ngFor="let e of events">
       <div class="evento-container">
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <!-- Mensaje cuando NO hay resultados -->
+    
     <div *ngIf="events.length === 0 && hayFiltrosActivos" class="col-12">
       <div class="alert alert-warning text-center py-5 my-5" role="alert">
         <i class="bi bi-search fs-1 d-block mb-3 text-warning"></i>
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <!-- Mensaje cuando NO hay eventos cargados del backend -->
+    
     <div
       *ngIf="
         events.length === 0 &&
@@ -89,3 +89,4 @@
     </div>
   </div>
 </div>
+
